@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 220 25% 10%;
+    --foreground: 210 20% 90%;
+
+    --card: 220 25% 13%;
+    --card-foreground: 210 20% 90%;
+
+    --popover: 220 25% 13%;
+    --popover-foreground: 210 20% 90%;
+
+    --primary: 210 100% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 210 20% 85%;
+
+    --muted: 220 20% 16%;
+    --muted-foreground: 215 15% 55%;
+
+    --accent: 220 20% 20%;
+    --accent-foreground: 210 20% 90%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 145 65% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 200 80% 55%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 220 20% 20%;
+    --input: 220 20% 18%;
+    --ring: 210 100% 55%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 220 30% 12%;
+    --sidebar-foreground: 210 15% 70%;
+    --sidebar-primary: 210 100% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 25% 18%;
+    --sidebar-accent-foreground: 210 20% 90%;
+    --sidebar-border: 220 20% 18%;
+    --sidebar-ring: 210 100% 55%;
+
+    /* Stats card colors */
+    --stats-received: 210 100% 55%;
+    --stats-pending: 38 92% 55%;
+    --stats-verified: 145 65% 45%;
+    --stats-erp-failed: 0 72% 55%;
+
+    /* Confidence colors */
+    --conf-high: 145 65% 45%;
+    --conf-medium: 38 92% 55%;
+    --conf-low: 0 72% 55%;
+
+    /* Badge colors */
+    --badge-po: 210 100% 55%;
+    --badge-so: 145 65% 45%;
+    --badge-invoice: 280 70% 55%;
+    --badge-quote: 38 92% 55%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}

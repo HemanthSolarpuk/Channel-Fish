@@ -1,0 +1,125 @@
+import { Button } from "@/components/ui/button";
+import { Truck, Send, MessageSquare, CheckCircle2, Square, CheckSquare } from "lucide-react";
+import { useState } from "react";
+
+function Field({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex gap-1.5 text-xs leading-snug">
+      <span className="text-muted-foreground shrink-0">{label}:</span>
+      <span className="text-foreground font-medium">{value}</span>
+    </div>
+  );
+}
+
+const checklistItems = [
+  "Carrier schedule reviewed",
+  "Dispatch timing confirmed",
+  "Warehouse load note sent",
+  "Palletized shipment readiness checked",
+  "Shipment documents contain PO number",
+];
+
+type CarrierStatus = "ready" | "awaiting" | "in-transit";
+
+const statusConfig: Record<CarrierStatus, { label: string; style: string }> = {
+  ready: { label: "Carrier Ready", style: "bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]" },
+  awaiting: { label: "Awaiting Dispatch", style: "bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))]" },
+  "in-transit": { label: "In Transit", style: "bg-[hsl(var(--info))]/15 text-[hsl(var(--info))]" },
+};
+
+export function CarrierDeliveryCard() {
+  const [checked, setChecked] = useState<boolean[]>(checklistItems.map(() => false));
+  const toggle = (i: number) => setChecked((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
+  const done = checked.filter(Boolean).length;
+
+  const status: CarrierStatus = "awaiting";
+  const s = statusConfig[status];
+
+  return (
+    <div className="rounded-lg border bg-card p-3 space-y-3">
+      {/* Status */}
+      <div className="flex items-center justify-between">
+        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${s.style}`}>{s.label}</span>
+        <span className="text-[10px] text-muted-foreground">{done}/{checklistItems.length} ready</span>
+      </div>
+
+      {/* Header */}
+      <div className="rounded-lg border bg-secondary/40 p-3 space-y-1.5">
+        <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">McLane Carrier Delivery</p>
+        <Field label="Customer" value="McLane Foodservice, Inc." />
+        <Field label="PO No" value="11428530" />
+        <Field label="Ship To" value="Manassas, 7501 Century Park Rd, Manassas VA 20109" />
+        <Field label="Ship Via" value="VANTIX LOGISTICS" />
+      </div>
+
+      {/* Shipment details */}
+      <div className="space-y-1">
+        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Shipment Details</p>
+        <Field label="PO Status" value="Accepted" />
+        <Field label="Est. Ship" value="2026-02-26" />
+        <Field label="Due Date" value="2026-02-27" />
+        <Field label="Load Type" value="Pallet" />
+        <Field label="Freight" value="COLLECT" />
+      </div>
+
+      {/* Line item */}
+      <div className="space-y-1">
+        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Line Item</p>
+        <div className="text-[11px] text-foreground bg-muted/50 rounded px-2 py-1 space-y-0.5">
+          <div><span className="font-medium">FISH POLLOCK SHIM 2</span></div>
+          <div className="text-muted-foreground">McLane Item: 00042073 · Supplier Item: 3260C006</div>
+          <div>Qty: 700 CA · 14 Pallets · 31,360.0 lbs · 718.0 cube</div>
+        </div>
+      </div>
+
+      {/* Totals */}
+      <div className="flex items-center justify-between text-xs px-1">
+        <span className="text-muted-foreground">Total Net PO Amount</span>
+        <span className="text-foreground font-semibold">$85,977.50</span>
+      </div>
+
+      {/* Checklist */}
+      <div className="space-y-1 pt-1 border-t border-border">
+        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Dispatch Checklist</p>
+        {checklistItems.map((item, i) => (
+          <button
+            key={i}
+            onClick={() => toggle(i)}
+            className="flex items-center gap-2 w-full text-left text-xs py-0.5 hover:bg-secondary/30 rounded px-1 transition-colors"
+          >
+            {checked[i] ? (
+              <CheckSquare className="w-3.5 h-3.5 text-[hsl(var(--success))] shrink-0" />
+            ) : (
+              <Square className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+            )}
+            <span className={checked[i] ? "text-muted-foreground line-through" : "text-foreground"}>{item}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* AI Summary */}
+      <div className="bg-primary/5 border border-primary/20 rounded-md px-3 py-2">
+        <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
+        <p className="text-xs text-foreground">
+          Ubik is managing a carrier-delivery flow from the actual McLane PO, using carrier, pallet, timing, and freight-collect data directly from the source document.
+        </p>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex flex-wrap gap-2 pt-1 border-t border-border">
+        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+          <Truck className="w-3 h-3" /> Confirm Dispatch Plan
+        </Button>
+        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+          <Send className="w-3 h-3" /> Send Warehouse Load Note
+        </Button>
+        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+          <MessageSquare className="w-3 h-3" /> Send Carrier Follow-up
+        </Button>
+        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+          <CheckCircle2 className="w-3 h-3" /> Mark Shipped
+        </Button>
+      </div>
+    </div>
+  );
+}
