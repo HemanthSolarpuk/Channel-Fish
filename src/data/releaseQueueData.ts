@@ -18,6 +18,7 @@ export interface ReleaseCase {
   quantity: string;
   status: ReleaseStatus;
   nextAction: string;
+  programId?: string;
   // Reference data — used to drive the drawer content
   isAldi?: boolean;
   isMcLane?: boolean;
@@ -25,7 +26,7 @@ export interface ReleaseCase {
 
 export const releaseCases: ReleaseCase[] = [
   {
-    id: "aldi",
+    id: "aldi-south-windsor",
     updated: "Apr 02, 09:14 AM",
     customer: "Aldi Inc.",
     poNumber: "7516245499",
@@ -35,6 +36,35 @@ export const releaseCases: ReleaseCase[] = [
     quantity: "100 Cartons",
     status: "Awaiting Warehouse Confirmation",
     nextAction: "Confirm staging at Americold Allentown",
+    programId: "aldi-northeast-frozen-seafood-vmi",
+    isAldi: true,
+  },
+  {
+    id: "aldi-manassas",
+    updated: "Apr 03, 01:20 PM",
+    customer: "Aldi Inc.",
+    poNumber: "7516245503",
+    flowType: "carrier",
+    shipTo: "Manassas DC, VA",
+    requestedDate: "04/24/2026",
+    quantity: "95 Cartons",
+    status: "Awaiting Carrier Readiness",
+    nextAction: "Confirm cod fillets transfer into outbound staging",
+    programId: "aldi-northeast-frozen-seafood-vmi",
+    isAldi: true,
+  },
+  {
+    id: "aldi-houston",
+    updated: "Apr 04, 10:05 AM",
+    customer: "Aldi Inc.",
+    poNumber: "7516245511",
+    flowType: "carrier",
+    shipTo: "Houston DC, TX",
+    requestedDate: "04/26/2026",
+    quantity: "88 Cartons",
+    status: "Ready for Release",
+    nextAction: "Generate final carrier release for shrimp allocation",
+    programId: "aldi-northeast-frozen-seafood-vmi",
     isAldi: true,
   },
   {
@@ -48,6 +78,7 @@ export const releaseCases: ReleaseCase[] = [
     quantity: "700 CA / 14 Pallets",
     status: "Awaiting Carrier Readiness",
     nextAction: "Confirm dispatch with VANTIX LOGISTICS",
+    programId: "mclane-midatlantic-protein-vmi",
     isMcLane: true,
   },
   {
@@ -61,6 +92,7 @@ export const releaseCases: ReleaseCase[] = [
     quantity: "420 CA / 9 Pallets",
     status: "Ready for Release",
     nextAction: "Generate carrier release",
+    programId: "sysco-gulf-seafood-vmi",
   },
   {
     id: "usfoods",

@@ -8,7 +8,6 @@ import { DecisionExceptionsCard } from "@/components/workflow/DecisionExceptions
 import { PickupScheduledCard } from "@/components/workflow/PickupScheduledCard";
 import { CarrierDeliveryCard } from "@/components/workflow/CarrierDeliveryCard";
 import { WorkflowCard } from "@/components/workflow/WorkflowCard";
-
 import { workflowOrders, type WorkflowColumnData, type WorkflowStatus } from "@/data/workflowData";
 import type { ReleaseCase } from "@/data/releaseQueueData";
 import { cn } from "@/lib/utils";
@@ -33,7 +32,6 @@ const statusLabel: Record<WorkflowStatus, string> = {
 };
 
 type Scenario = "aldi" | "mclane";
-
 interface DrawerStep {
   id: string;
   title: string;
@@ -43,6 +41,14 @@ interface DrawerStep {
 }
 
 export function WorkflowDrawer({ releaseCase, onClose }: Props) {
+  const [activeStepId, setActiveStepId] = useState("1-context");
+
+  useEffect(() => {
+    if (releaseCase) {
+      setActiveStepId("1-context");
+    }
+  }, [releaseCase?.id]);
+
   if (!releaseCase) return null;
 
   const isAldi = releaseCase.isAldi;
@@ -53,11 +59,6 @@ export function WorkflowDrawer({ releaseCase, onClose }: Props) {
     releaseCase.flowType === "pickup"
       ? ["1-context", "2-fulfillment", "3-erp-check", "4-decision", "5a-pickup", "6-execution", "7-pod", "8-invoice"]
       : ["1-context", "2-fulfillment", "3-erp-check", "4-decision", "5b-carrier", "6-execution", "7-pod", "8-invoice"];
-  const [activeStepId, setActiveStepId] = useState("1-context");
-
-  useEffect(() => {
-    setActiveStepId("1-context");
-  }, [releaseCase.id]);
 
   const stepMap = new Map(order.columns.map((column) => [column.id, column]));
   const steps: DrawerStep[] = orderedStepIds
@@ -81,51 +82,54 @@ export function WorkflowDrawer({ releaseCase, onClose }: Props) {
       <div className="absolute inset-0 bg-white/78 backdrop-blur-sm" onClick={onClose} />
 
       <div className="absolute inset-0 flex flex-col border-l border-border bg-background shadow-2xl">
-        <div className="flex flex-wrap items-start justify-between gap-3 px-4 md:px-5 py-3 border-b border-border shrink-0">
-          <div className="min-w-0 flex-1 space-y-1">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <h2 className="text-base font-semibold text-foreground">{releaseCase.customer}</h2>
-              <span className="text-xs text-muted-foreground font-mono break-all sm:break-normal">PO #{releaseCase.poNumber}</span>
+        <div className="shrink-0 border-b border-border px-4 py-3 md:px-5">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0 flex-1 space-y-1">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <h2 className="text-base font-semibold text-foreground">{releaseCase.customer}</h2>
+                <span className="break-all font-mono text-xs text-muted-foreground sm:break-normal">PO #{releaseCase.poNumber}</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded bg-primary/15 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                  {flowTypeLabel[releaseCase.flowType]}
+                </span>
+                <span className="rounded bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                  {releaseCase.status}
+                </span>
+              </div>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-primary/15 text-primary">
-                {flowTypeLabel[releaseCase.flowType]}
-              </span>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-primary/10 text-primary">
-                {releaseCase.status}
-              </span>
+
+            <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto">
+              <Button variant="outline" size="sm" className="h-7 text-xs">View PO</Button>
+              <Button variant="outline" size="sm" className="h-7 text-xs">Open ERP</Button>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
+                <X className="h-4 w-4" />
+              </Button>
             </div>
-          </div>
-          <div className="flex flex-wrap items-center justify-end gap-2 w-full sm:w-auto">
-            <Button variant="outline" size="sm" className="text-xs h-7">View PO</Button>
-            <Button variant="outline" size="sm" className="text-xs h-7">Open ERP</Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
-              <X className="w-4 h-4" />
-            </Button>
           </div>
         </div>
 
         <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden px-4 py-4 md:px-6">
-          <div className="h-[calc(100vh-7.75rem)] max-h-[calc(100vh-7.75rem)] rounded-[28px] border border-stone-200 bg-stone-50 p-4 shadow-[0_18px_48px_rgba(148,163,184,0.12)] md:p-5">
+          <div className="h-[calc(100vh-7rem)] max-h-[calc(100vh-7rem)] rounded-[28px] border border-stone-200 bg-stone-50 p-4 shadow-[0_18px_48px_rgba(148,163,184,0.12)] md:p-5">
             <div className="flex h-full min-w-max items-start gap-4 pb-2">
-            {steps.map((step, index) =>
-              step.id === currentStep.id ? (
-                <KanbanExpandedStep
-                  key={step.id}
-                  step={step}
-                  nextStep={nextStep}
-                  onAdvance={nextStep ? () => setActiveStepId(nextStep.id) : undefined}
-                />
-              ) : (
-                <KanbanCollapsedStep
-                  key={step.id}
-                  step={step}
-                  index={index}
-                  isBeforeActive={index < safeActiveIndex}
-                  onSelect={() => setActiveStepId(step.id)}
-                />
-              ),
-            )}
+              {steps.map((step, index) =>
+                step.id === currentStep.id ? (
+                  <KanbanExpandedStep
+                    key={step.id}
+                    step={step}
+                    nextStep={nextStep}
+                    onAdvance={nextStep ? () => setActiveStepId(nextStep.id) : undefined}
+                  />
+                ) : (
+                  <KanbanCollapsedStep
+                    key={step.id}
+                    step={step}
+                    index={index}
+                    isBeforeActive={index < safeActiveIndex}
+                    onSelect={() => setActiveStepId(step.id)}
+                  />
+                ),
+              )}
             </div>
           </div>
         </div>
@@ -162,9 +166,7 @@ function KanbanExpandedStep({
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto p-3 md:p-4">
-        <div className="space-y-3">
-        {step.content}
-        </div>
+        <div className="space-y-3">{step.content}</div>
       </div>
 
       {nextStep && onAdvance ? (
@@ -195,9 +197,7 @@ function KanbanCollapsedStep({
   isBeforeActive: boolean;
   onSelect: () => void;
 }) {
-  const collapsedTone = isBeforeActive
-    ? "border-emerald-100 bg-emerald-50"
-    : "border-stone-200 bg-white";
+  const collapsedTone = isBeforeActive ? "border-emerald-100 bg-emerald-50" : "border-stone-200 bg-white";
 
   return (
     <button
@@ -209,12 +209,12 @@ function KanbanCollapsedStep({
       )}
     >
       <div className="flex h-full min-h-0">
-        <div className={cn(
-          "flex w-10 shrink-0 items-center justify-center rounded-l-[22px] border-r px-1",
-          isBeforeActive
-            ? "border-emerald-100 bg-emerald-50 text-emerald-700"
-            : "border-stone-200 bg-stone-50 text-slate-500",
-        )}>
+        <div
+          className={cn(
+            "flex w-10 shrink-0 items-center justify-center rounded-l-[22px] border-r px-1",
+            isBeforeActive ? "border-emerald-100 bg-emerald-50 text-emerald-700" : "border-stone-200 bg-stone-50 text-slate-500",
+          )}
+        >
           <span className="[writing-mode:vertical-rl] rotate-180 text-[11px] font-semibold uppercase tracking-[0.28em]">
             {isBeforeActive ? "Completed" : "Queued"}
           </span>
@@ -236,7 +236,7 @@ function KanbanCollapsedStep({
 
             <div className="rounded-xl border border-stone-200 bg-background px-3 py-2.5">
               <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Summary</p>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-6">{step.summary}</p>
+              <p className="mt-2 line-clamp-6 text-xs leading-relaxed text-muted-foreground">{step.summary}</p>
             </div>
 
             <div className="space-y-2 rounded-xl border border-stone-200 bg-card px-3 py-3">

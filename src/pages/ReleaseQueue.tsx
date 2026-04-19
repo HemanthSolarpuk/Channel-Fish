@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Search, RefreshCw, Bell } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { ReleaseQueueTable } from "@/components/ReleaseQueueTable";
@@ -14,6 +15,7 @@ const filterTabs: { id: Filter; label: string }[] = [
 ];
 
 const Index = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filter, setFilter] = useState<Filter>("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<ReleaseCase | null>(null);
@@ -34,6 +36,26 @@ const Index = () => {
         c.shipTo.toLowerCase().includes(search.toLowerCase())
       );
   }, [filter, search]);
+
+  useEffect(() => {
+    const caseId = searchParams.get("caseId");
+    if (!caseId) {
+      setSelected(null);
+      return;
+    }
+
+    setSelected(releaseCases.find((item) => item.id === caseId) ?? null);
+  }, [searchParams]);
+
+  const handleRowClick = (releaseCase: ReleaseCase) => {
+    setSelected(releaseCase);
+    setSearchParams({ caseId: releaseCase.id });
+  };
+
+  const handleClose = () => {
+    setSelected(null);
+    setSearchParams({});
+  };
 
   return (
     <AppLayout>
@@ -93,12 +115,12 @@ const Index = () => {
 
         {/* Table */}
         <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <ReleaseQueueTable cases={filtered} onRowClick={setSelected} />
+          <ReleaseQueueTable cases={filtered} onRowClick={handleRowClick} />
         </div>
       </div>
 
       {/* Drawer */}
-      <WorkflowDrawer releaseCase={selected} onClose={() => setSelected(null)} />
+      <WorkflowDrawer releaseCase={selected} onClose={handleClose} />
     </AppLayout>
   );
 };

@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import ReleaseQueue from "./pages/ReleaseQueue.tsx";
 import DocumentDetail from "./pages/DocumentDetail.tsx";
+import VmiProgramsPage from "./pages/VmiProgramsPage.tsx";
+import VmiProgramDetailPage from "./pages/VmiProgramDetailPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -18,6 +20,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/vmi-programs" element={<VmiProgramsPage />} />
+          <Route path="/vmi-programs/:programId" element={<VmiProgramDetailPage />} />
           <Route path="/release-queue" element={<ReleaseQueue />} />
           <Route path="/document/:id" element={<DocumentDetail />} />
           <Route path="*" element={<NotFound />} />
@@ -28,5 +32,4 @@ const App = () => (
 );
 
 export default App;
-
 

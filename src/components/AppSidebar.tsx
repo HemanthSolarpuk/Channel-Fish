@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutGrid, Settings, Menu, GitBranchPlus } from "lucide-react";
+import { LayoutGrid, Settings, Menu, GitBranchPlus, Boxes } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
   { icon: LayoutGrid, label: "Po's queue", path: "/" },
+  { icon: Boxes, label: "VMI Programs", path: "/vmi-programs" },
   { icon: GitBranchPlus, label: "Delivery Workflow", path: "/release-queue" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
@@ -29,7 +30,7 @@ export function AppSidebar() {
       {/* Nav */}
       <nav className="flex-1 px-2 py-3 space-y-1">
         {navItems.map((item) => {
-          const active = location.pathname === item.path;
+          const active = item.path === "/" ? location.pathname === item.path : location.pathname.startsWith(item.path);
           return (
             <Link
               key={item.path}
