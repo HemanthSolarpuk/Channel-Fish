@@ -30,7 +30,7 @@ export function WorkflowCard({ data }: { data: WorkflowColumnData }) {
 
   return (
     <div
-      className={`rounded-lg border bg-card p-3 space-y-3 transition-opacity ${
+      className={`rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5 transition-opacity ${
         data.dimmed ? "opacity-35 pointer-events-none" : ""
       }`}
     >
@@ -46,12 +46,12 @@ export function WorkflowCard({ data }: { data: WorkflowColumnData }) {
         <div className="space-y-1">
           <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Source (PO)</p>
           {sourceFields.map((f, i) => (
-            <div key={i} className="flex items-center gap-1.5 text-xs">
-              <span className={`text-[9px] font-semibold px-1 py-px rounded ${sourceTagColor[f.source]}`}>
+            <div key={i} className="flex items-start gap-1.5 text-xs">
+              <span className={`shrink-0 text-[9px] font-semibold px-1 py-px rounded ${sourceTagColor[f.source]}`}>
                 {f.source}
               </span>
-              <span className="text-muted-foreground">{f.label}:</span>
-              <span className="text-foreground font-medium truncate">{f.value}</span>
+              <span className="text-muted-foreground shrink-0">{f.label}:</span>
+              <span className="text-foreground font-medium min-w-0 whitespace-normal break-words">{f.value}</span>
             </div>
           ))}
         </div>
@@ -62,12 +62,12 @@ export function WorkflowCard({ data }: { data: WorkflowColumnData }) {
         <div className="space-y-1">
           <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Derived</p>
           {derivedFields.map((f, i) => (
-            <div key={i} className="flex items-center gap-1.5 text-xs">
-              <span className={`text-[9px] font-semibold px-1 py-px rounded ${sourceTagColor[f.source]}`}>
+            <div key={i} className="flex items-start gap-1.5 text-xs">
+              <span className={`shrink-0 text-[9px] font-semibold px-1 py-px rounded ${sourceTagColor[f.source]}`}>
                 {f.source}
               </span>
-              <span className="text-muted-foreground">{f.label}:</span>
-              <span className="text-foreground font-medium truncate">{f.value}</span>
+              <span className="text-muted-foreground shrink-0">{f.label}:</span>
+              <span className="text-foreground font-medium min-w-0 whitespace-normal break-words">{f.value}</span>
             </div>
           ))}
         </div>

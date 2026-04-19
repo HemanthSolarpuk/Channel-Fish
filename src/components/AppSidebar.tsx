@@ -3,8 +3,8 @@ import { LayoutGrid, Settings, Menu, GitBranchPlus } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
-  { icon: LayoutGrid, label: "Document Queue", path: "/" },
-  { icon: GitBranchPlus, label: "Release Workflow", path: "/release-queue" },
+  { icon: LayoutGrid, label: "Po's queue", path: "/" },
+  { icon: GitBranchPlus, label: "Delivery Workflow", path: "/release-queue" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
 

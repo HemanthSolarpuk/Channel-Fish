@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { HumanApprovalPanel } from "@/components/workflow/HumanApprovalPanel";
 import { Package, FlaskConical, Warehouse, MapPin } from "lucide-react";
+type Scenario = "aldi" | "mclane";
 
 function Field({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex gap-1.5 text-xs leading-snug">
-      <span className="text-muted-foreground shrink-0">{label}:</span>
-      <span className="text-foreground font-medium">{value}</span>
+    <div className="flex items-start gap-1.5 text-xs leading-snug">
+      <span className="text-muted-foreground shrink-0 w-[108px]">{label}:</span>
+      <span className="text-foreground font-medium min-w-0 whitespace-normal break-words">{value}</span>
     </div>
   );
 }
@@ -26,10 +28,10 @@ function SourceTag({ tag }: { tag: string }) {
 
 function DerivedField({ tag, label, value, highlight }: { tag: string; label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="flex items-center gap-1.5 text-xs leading-snug">
+    <div className="flex items-start gap-1.5 text-xs leading-snug">
       <SourceTag tag={tag} />
-      <span className="text-muted-foreground shrink-0">{label}:</span>
-      <span className={`font-medium ${highlight ? "text-[hsl(var(--warning))]" : "text-foreground"}`}>{value}</span>
+      <span className="text-muted-foreground shrink-0 w-[120px]">{label}:</span>
+      <span className={`font-medium min-w-0 whitespace-normal break-words ${highlight ? "text-[hsl(var(--warning))]" : "text-foreground"}`}>{value}</span>
     </div>
   );
 }
@@ -101,8 +103,8 @@ function ExampleTile({
 }) {
   const s = statusConfig[status];
   return (
-    <div className="rounded-lg border bg-secondary/40 p-3 space-y-2">
-      <div className="flex items-center justify-between">
+    <div className="rounded-lg border bg-secondary/40 p-2.5 md:p-3 space-y-1.5">
+      <div className="flex flex-wrap items-start justify-between gap-1.5">
         <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">{label}</p>
         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${s.style}`}>{s.label}</span>
       </div>
@@ -111,7 +113,7 @@ function ExampleTile({
       <div className="space-y-1">
         <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">PO Source Data</p>
         {source.products.map((p, i) => (
-          <div key={i} className="text-[11px] text-foreground bg-muted/50 rounded px-2 py-1">
+          <div key={i} className="text-[11px] text-foreground bg-muted/50 rounded px-2 py-1 whitespace-normal break-words">
             <span className="text-muted-foreground">{p.gtin}</span>
             {" — "}
             <span className="font-medium">{p.name}</span>
@@ -135,18 +137,21 @@ function ExampleTile({
   );
 }
 
-export function ErpWarehouseCard() {
+export function ErpWarehouseCard({ scenario }: { scenario: Scenario }) {
   return (
-    <div className="rounded-lg border bg-card p-3 space-y-3">
+    <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
       <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]">
         ERP + Warehouse Checked
       </span>
 
-      <ExampleTile label="ALDI Example" source={aldiSource} derived={aldiDerived} status="ready" />
-      <ExampleTile label="McLane Example" source={mclaneSource} derived={mclaneDerived} status="ready" />
+      {scenario === "mclane" ? (
+        <ExampleTile label="McLane Example" source={mclaneSource} derived={mclaneDerived} status="ready" />
+      ) : (
+        <ExampleTile label="ALDI Example" source={aldiSource} derived={aldiDerived} status="ready" />
+      )}
 
       {/* Business Note */}
-      <div className="bg-[hsl(var(--warning))]/5 border border-[hsl(var(--warning))]/20 rounded-md px-3 py-2">
+      <div className="bg-[hsl(var(--warning))]/5 border border-[hsl(var(--warning))]/20 rounded-md px-2.5 py-2">
         <p className="text-[10px] text-[hsl(var(--warning))] font-semibold uppercase tracking-wider mb-0.5">Business Rule</p>
         <p className="text-xs text-foreground">
           If FIFO-preferred stock is in a farther warehouse and SLA is at risk, Ubik can recommend a FIFO override with operator approval.
@@ -154,25 +159,40 @@ export function ErpWarehouseCard() {
       </div>
 
       {/* AI Summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-md px-3 py-2">
+      <div className="bg-primary/5 border border-primary/20 rounded-md px-2.5 py-2">
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
         <p className="text-xs text-foreground">
           Ubik combines source PO fields with ERP and warehouse checks before permitting release.
         </p>
       </div>
 
+      <HumanApprovalPanel
+        title="Operator Approval"
+        description={
+          scenario === "mclane"
+            ? "Approve the warehouse readiness decision or leave storage and allocation instructions."
+            : "Approve the FIFO and warehouse decision, or give alternate storage instructions."
+        }
+        quickActions={
+          scenario === "mclane"
+            ? ["Approve warehouse readiness", "Request recheck", "Escalate inventory issue"]
+            : ["Approve FIFO override", "Keep strict FIFO", "Request warehouse recheck"]
+        }
+        placeholder="Add inventory, lot, QA, or storage instructions for AI and warehouse operations."
+      />
+
       {/* Buttons */}
-      <div className="flex flex-wrap gap-2 pt-1 border-t border-border">
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+      <div className="flex flex-wrap gap-2 pt-1 border-t border-border [&>button]:max-w-full [&>button]:whitespace-normal [&>button]:h-auto [&>button]:min-h-7 [&>button]:py-1 [&>button]:leading-tight">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <Package className="w-3 h-3" /> View Inventory Detail
         </Button>
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <Package className="w-3 h-3" /> View Lot Availability
         </Button>
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <FlaskConical className="w-3 h-3" /> View QA Status
         </Button>
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <Warehouse className="w-3 h-3" /> View Storage Recommendation
         </Button>
       </div>

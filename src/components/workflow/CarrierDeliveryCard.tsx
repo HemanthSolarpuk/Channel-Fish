@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { HumanApprovalPanel } from "@/components/workflow/HumanApprovalPanel";
 import { Truck, Send, MessageSquare, CheckCircle2, Square, CheckSquare } from "lucide-react";
 import { useState } from "react";
 
 function Field({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex gap-1.5 text-xs leading-snug">
-      <span className="text-muted-foreground shrink-0">{label}:</span>
-      <span className="text-foreground font-medium">{value}</span>
+    <div className="flex items-start gap-1.5 text-xs leading-snug">
+      <span className="text-muted-foreground shrink-0 w-[96px]">{label}:</span>
+      <span className="text-foreground font-medium min-w-0 whitespace-normal break-words">{value}</span>
     </div>
   );
 }
@@ -36,7 +37,7 @@ export function CarrierDeliveryCard() {
   const s = statusConfig[status];
 
   return (
-    <div className="rounded-lg border bg-card p-3 space-y-3">
+    <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
       {/* Status */}
       <div className="flex items-center justify-between">
         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${s.style}`}>{s.label}</span>
@@ -44,7 +45,7 @@ export function CarrierDeliveryCard() {
       </div>
 
       {/* Header */}
-      <div className="rounded-lg border bg-secondary/40 p-3 space-y-1.5">
+      <div className="rounded-lg border bg-secondary/40 p-2.5 md:p-3 space-y-1.5">
         <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">McLane Carrier Delivery</p>
         <Field label="Customer" value="McLane Foodservice, Inc." />
         <Field label="PO No" value="11428530" />
@@ -67,8 +68,8 @@ export function CarrierDeliveryCard() {
         <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Line Item</p>
         <div className="text-[11px] text-foreground bg-muted/50 rounded px-2 py-1 space-y-0.5">
           <div><span className="font-medium">FISH POLLOCK SHIM 2</span></div>
-          <div className="text-muted-foreground">McLane Item: 00042073 · Supplier Item: 3260C006</div>
-          <div>Qty: 700 CA · 14 Pallets · 31,360.0 lbs · 718.0 cube</div>
+          <div className="text-muted-foreground whitespace-normal break-words">McLane Item: 00042073 · Supplier Item: 3260C006</div>
+          <div className="whitespace-normal break-words">Qty: 700 CA · 14 Pallets · 31,360.0 lbs · 718.0 cube</div>
         </div>
       </div>
 
@@ -92,31 +93,38 @@ export function CarrierDeliveryCard() {
             ) : (
               <Square className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
             )}
-            <span className={checked[i] ? "text-muted-foreground line-through" : "text-foreground"}>{item}</span>
+            <span className={`min-w-0 whitespace-normal break-words ${checked[i] ? "text-muted-foreground line-through" : "text-foreground"}`}>{item}</span>
           </button>
         ))}
       </div>
 
       {/* AI Summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-md px-3 py-2">
+      <div className="bg-primary/5 border border-primary/20 rounded-md px-2.5 py-2">
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
         <p className="text-xs text-foreground">
           Ubik is managing a carrier-delivery flow from the actual McLane PO, using carrier, pallet, timing, and freight-collect data directly from the source document.
         </p>
       </div>
 
+      <HumanApprovalPanel
+        title="Dispatch Approval"
+        description="Confirm dispatch readiness with a quick action, or write custom instructions for carrier coordination."
+        quickActions={["Approve dispatch", "Request carrier follow-up", "Hold shipment"]}
+        placeholder="Add dispatch notes, carrier instructions, or alternate shipment handling guidance."
+      />
+
       {/* Buttons */}
-      <div className="flex flex-wrap gap-2 pt-1 border-t border-border">
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+      <div className="flex flex-wrap gap-2 pt-1 border-t border-border [&>button]:max-w-full [&>button]:whitespace-normal [&>button]:h-auto [&>button]:min-h-7 [&>button]:py-1 [&>button]:leading-tight">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <Truck className="w-3 h-3" /> Confirm Dispatch Plan
         </Button>
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <Send className="w-3 h-3" /> Send Warehouse Load Note
         </Button>
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <MessageSquare className="w-3 h-3" /> Send Carrier Follow-up
         </Button>
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <CheckCircle2 className="w-3 h-3" /> Mark Shipped
         </Button>
       </div>

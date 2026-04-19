@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FileText, ShoppingCart, Database } from "lucide-react";
+type Scenario = "aldi" | "mclane";
 
 interface LineItem {
   sku: string;
@@ -63,16 +64,16 @@ const mclaneTile: OrderTile = {
 
 function Field({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex gap-1.5 text-xs leading-snug">
-      <span className="text-muted-foreground shrink-0">{label}:</span>
-      <span className="text-foreground font-medium">{value}</span>
+    <div className="flex items-start gap-1.5 text-xs leading-snug">
+      <span className="text-muted-foreground shrink-0 w-[92px]">{label}:</span>
+      <span className="text-foreground font-medium min-w-0 whitespace-normal break-words">{value}</span>
     </div>
   );
 }
 
 function Tile({ tile, label }: { tile: OrderTile; label: string }) {
   return (
-    <div className="rounded-lg border bg-secondary/40 p-3 space-y-2">
+    <div className="rounded-lg border bg-secondary/40 p-2.5 md:p-3 space-y-1.5">
       <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">{label}</p>
       <Field label="Customer" value={tile.customer} />
       <Field label="PO No" value={tile.poNo} />
@@ -93,7 +94,7 @@ function Tile({ tile, label }: { tile: OrderTile; label: string }) {
       <div className="pt-1 border-t border-border space-y-1">
         <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Line Items</p>
         {tile.lineItems.map((li, i) => (
-          <div key={i} className="text-[11px] text-foreground bg-muted/50 rounded px-2 py-1">
+          <div key={i} className="text-[11px] text-foreground bg-muted/50 rounded px-2 py-1 whitespace-normal break-words">
             <span className="text-muted-foreground">{li.sku}</span>
             {" — "}
             <span className="font-medium">{li.description}</span>
@@ -106,9 +107,12 @@ function Tile({ tile, label }: { tile: OrderTile; label: string }) {
   );
 }
 
-export function OrderContextCard() {
+export function OrderContextCard({ scenario }: { scenario: Scenario }) {
+  const selectedTile = scenario === "mclane" ? mclaneTile : aldiTile;
+  const selectedLabel = scenario === "mclane" ? "McLane Carrier Delivery" : "ALDI Pickup Scheduled";
+
   return (
-    <div className="rounded-lg border bg-card p-3 space-y-3">
+    <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
       {/* Status chip */}
       <div className="flex items-center gap-2">
         <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]">
@@ -116,12 +120,11 @@ export function OrderContextCard() {
         </span>
       </div>
 
-      {/* Two example tiles */}
-      <Tile tile={aldiTile} label="ALDI Pickup Scheduled" />
-      <Tile tile={mclaneTile} label="McLane Carrier Delivery" />
+      {/* Single selected PO context */}
+      <Tile tile={selectedTile} label={selectedLabel} />
 
       {/* AI Summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-md px-3 py-2">
+      <div className="bg-primary/5 border border-primary/20 rounded-md px-2.5 py-2">
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
         <p className="text-xs text-foreground">
           Ubik has already captured the PO source data and linked it to the existing sales order and ERP context.
@@ -129,14 +132,14 @@ export function OrderContextCard() {
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-2 pt-1 border-t border-border">
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+      <div className="flex flex-wrap gap-2 pt-1 border-t border-border [&>button]:max-w-full [&>button]:whitespace-normal [&>button]:h-auto [&>button]:min-h-7 [&>button]:py-1 [&>button]:leading-tight">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <FileText className="w-3 h-3" /> View PO
         </Button>
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <ShoppingCart className="w-3 h-3" /> View SO
         </Button>
-        <Button variant="outline" size="sm" className="text-[11px] h-7 px-2 gap-1">
+        <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <Database className="w-3 h-3" /> View ERP Record
         </Button>
       </div>
