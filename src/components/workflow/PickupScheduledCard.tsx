@@ -28,14 +28,6 @@ export function PickupScheduledCard() {
 
   return (
     <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
-      {/* Status */}
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[hsl(var(--info))]/15 text-[hsl(var(--info))]">
-          Pickup Scheduled
-        </span>
-        <span className="text-[10px] text-muted-foreground">{done}/{checklistItems.length} ready</span>
-      </div>
-
       {/* Header fields */}
       <div className="rounded-lg border bg-secondary/40 p-2.5 md:p-3 space-y-1.5">
         <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">ALDI Pickup</p>
@@ -66,7 +58,10 @@ export function PickupScheduledCard() {
 
       {/* Checklist */}
       <div className="space-y-1 pt-1 border-t border-border">
-        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Release Checklist</p>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Release Checklist</p>
+          <span className="text-[10px] text-muted-foreground">{done}/{checklistItems.length} ready</span>
+        </div>
         {checklistItems.map((item, i) => (
           <button
             key={i}
@@ -81,14 +76,6 @@ export function PickupScheduledCard() {
             <span className={`min-w-0 whitespace-normal break-words ${checked[i] ? "text-muted-foreground line-through" : "text-foreground"}`}>{item}</span>
           </button>
         ))}
-      </div>
-
-      {/* AI Summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-md px-2.5 py-2">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
-        <p className="text-xs text-foreground">
-          Ubik is managing the pickup-based release flow using the actual ALDI PO dates, pickup site, destination, and item quantities.
-        </p>
       </div>
 
       <HumanApprovalPanel

@@ -48,11 +48,6 @@ function ModeCard({
 export function FulfillmentModeCard({ scenario }: { scenario: Scenario }) {
   return (
     <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
-      {/* Status chip */}
-      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]">
-        Mode Classified
-      </span>
-
       {scenario === "mclane" ? (
         <ModeCard
           title="Carrier Delivery / Collect Freight"
@@ -90,14 +85,6 @@ export function FulfillmentModeCard({ scenario }: { scenario: Scenario }) {
           ]}
         />
       )}
-
-      {/* AI Summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-md px-2.5 py-2">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
-        <p className="text-xs text-foreground">
-          Ubik classified the correct execution path directly from the PO format and routing details.
-        </p>
-      </div>
 
       <HumanApprovalPanel
         title="Human Approval"

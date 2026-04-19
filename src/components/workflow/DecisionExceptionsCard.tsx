@@ -15,11 +15,11 @@ function Field({ label, value, highlight }: { label: string; value: string; high
 type DecisionState = "release" | "await-warehouse" | "await-carrier" | "qa-hold" | "doc-exception";
 
 const decisionConfig: Record<DecisionState, { label: string; style: string }> = {
-  release: { label: "Release Now", style: "bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]" },
-  "await-warehouse": { label: "Await Warehouse Confirmation", style: "bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))]" },
-  "await-carrier": { label: "Await Carrier Readiness", style: "bg-[hsl(var(--info))]/15 text-[hsl(var(--info))]" },
-  "qa-hold": { label: "Hold for QA", style: "bg-[hsl(var(--destructive))]/15 text-[hsl(var(--destructive))]" },
-  "doc-exception": { label: "Documentation Exception", style: "bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))]" },
+  release: { label: "Release Now", style: "bg-success/15 text-success" },
+  "await-warehouse": { label: "Await Warehouse Confirmation", style: "bg-primary/10 text-primary" },
+  "await-carrier": { label: "Await Carrier Readiness", style: "bg-primary/10 text-primary" },
+  "qa-hold": { label: "Hold for QA", style: "bg-primary/10 text-primary" },
+  "doc-exception": { label: "Documentation Exception", style: "bg-primary/10 text-primary" },
 };
 
 function DecisionChip({ state }: { state: DecisionState }) {
@@ -88,10 +88,6 @@ function ExampleTile({
 export function DecisionExceptionsCard({ scenario }: { scenario: Scenario }) {
   return (
     <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
-      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]">
-        Decision Evaluated
-      </span>
-
       {scenario === "mclane" ? (
         <ExampleTile
           label="McLane — Carrier Delivery"
@@ -126,14 +122,6 @@ export function DecisionExceptionsCard({ scenario }: { scenario: Scenario }) {
           aiRec="Release after pickup prep confirmation. Await warehouse manifest / prep note if staging not confirmed."
         />
       )}
-
-      {/* AI Summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-md px-2.5 py-2">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
-        <p className="text-xs text-foreground">
-          Ubik has decided whether the order can move now, whether warehouse confirmation is still pending, or whether carrier readiness must be confirmed first.
-        </p>
-      </div>
 
       <HumanApprovalPanel
         title="Human Decision"

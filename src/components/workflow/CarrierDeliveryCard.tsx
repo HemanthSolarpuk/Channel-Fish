@@ -23,9 +23,9 @@ const checklistItems = [
 type CarrierStatus = "ready" | "awaiting" | "in-transit";
 
 const statusConfig: Record<CarrierStatus, { label: string; style: string }> = {
-  ready: { label: "Carrier Ready", style: "bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]" },
-  awaiting: { label: "Awaiting Dispatch", style: "bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))]" },
-  "in-transit": { label: "In Transit", style: "bg-[hsl(var(--info))]/15 text-[hsl(var(--info))]" },
+  ready: { label: "Carrier Ready", style: "bg-success/15 text-success" },
+  awaiting: { label: "Awaiting Dispatch", style: "bg-primary/10 text-primary" },
+  "in-transit": { label: "In Transit", style: "bg-primary/10 text-primary" },
 };
 
 export function CarrierDeliveryCard() {
@@ -38,12 +38,6 @@ export function CarrierDeliveryCard() {
 
   return (
     <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
-      {/* Status */}
-      <div className="flex items-center justify-between">
-        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${s.style}`}>{s.label}</span>
-        <span className="text-[10px] text-muted-foreground">{done}/{checklistItems.length} ready</span>
-      </div>
-
       {/* Header */}
       <div className="rounded-lg border bg-secondary/40 p-2.5 md:p-3 space-y-1.5">
         <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">McLane Carrier Delivery</p>
@@ -81,7 +75,13 @@ export function CarrierDeliveryCard() {
 
       {/* Checklist */}
       <div className="space-y-1 pt-1 border-t border-border">
-        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Dispatch Checklist</p>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Dispatch Checklist</p>
+          <div className="flex items-center gap-2">
+            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${s.style}`}>{s.label}</span>
+            <span className="text-[10px] text-muted-foreground">{done}/{checklistItems.length} ready</span>
+          </div>
+        </div>
         {checklistItems.map((item, i) => (
           <button
             key={i}
@@ -96,14 +96,6 @@ export function CarrierDeliveryCard() {
             <span className={`min-w-0 whitespace-normal break-words ${checked[i] ? "text-muted-foreground line-through" : "text-foreground"}`}>{item}</span>
           </button>
         ))}
-      </div>
-
-      {/* AI Summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-md px-2.5 py-2">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
-        <p className="text-xs text-foreground">
-          Ubik is managing a carrier-delivery flow from the actual McLane PO, using carrier, pallet, timing, and freight-collect data directly from the source document.
-        </p>
       </div>
 
       <HumanApprovalPanel

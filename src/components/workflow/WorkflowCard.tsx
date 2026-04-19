@@ -34,13 +34,6 @@ export function WorkflowCard({ data }: { data: WorkflowColumnData }) {
         data.dimmed ? "opacity-35 pointer-events-none" : ""
       }`}
     >
-      {/* Status */}
-      <div className="flex items-center justify-between">
-        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusStyles[data.status]}`}>
-          {statusLabel[data.status]}
-        </span>
-      </div>
-
       {/* Source Fields */}
       {sourceFields.length > 0 && (
         <div className="space-y-1">

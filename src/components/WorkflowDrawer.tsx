@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowRight, ChevronRight, Sparkles, X } from "lucide-react";
+import { ArrowRight, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OrderContextCard } from "@/components/workflow/OrderContextCard";
 import { FulfillmentModeCard } from "@/components/workflow/FulfillmentModeCard";
@@ -20,10 +20,10 @@ interface Props {
 
 const flowTypeLabel = { pickup: "Pickup Scheduled", carrier: "Carrier Delivery" };
 const statusStyles: Record<WorkflowStatus, string> = {
-  pending: "bg-muted text-muted-foreground",
-  "in-progress": "bg-warning/15 text-warning",
+  pending: "bg-primary/10 text-primary",
+  "in-progress": "bg-primary/10 text-primary",
   complete: "bg-success/15 text-success",
-  exception: "bg-destructive/15 text-destructive",
+  exception: "bg-primary/10 text-primary",
 };
 const statusLabel: Record<WorkflowStatus, string> = {
   pending: "Pending",
@@ -78,12 +78,9 @@ export function WorkflowDrawer({ releaseCase, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50">
-      {/* Full-screen backdrop so sidebar width does not reduce drawer space */}
-      <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-white/78 backdrop-blur-sm" onClick={onClose} />
 
-      {/* Full-screen drawer */}
-      <div className="absolute inset-0 bg-background border-l border-border flex flex-col shadow-2xl">
-        {/* Drawer Header */}
+      <div className="absolute inset-0 flex flex-col border-l border-border bg-background shadow-2xl">
         <div className="flex flex-wrap items-start justify-between gap-3 px-4 md:px-5 py-3 border-b border-border shrink-0">
           <div className="min-w-0 flex-1 space-y-1">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -94,7 +91,7 @@ export function WorkflowDrawer({ releaseCase, onClose }: Props) {
               <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-primary/15 text-primary">
                 {flowTypeLabel[releaseCase.flowType]}
               </span>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-warning/15 text-warning">
+              <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-primary/10 text-primary">
                 {releaseCase.status}
               </span>
             </div>
@@ -109,7 +106,7 @@ export function WorkflowDrawer({ releaseCase, onClose }: Props) {
         </div>
 
         <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden px-4 py-4 md:px-6">
-          <div className="h-[calc(100vh-7.75rem)] max-h-[calc(100vh-7.75rem)] rounded-[28px] border border-border/80 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.14),transparent_28%),linear-gradient(135deg,rgba(255,255,255,0.02),rgba(255,255,255,0))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] md:p-5">
+          <div className="h-[calc(100vh-7.75rem)] max-h-[calc(100vh-7.75rem)] rounded-[28px] border border-stone-200 bg-stone-50 p-4 shadow-[0_18px_48px_rgba(148,163,184,0.12)] md:p-5">
             <div className="flex h-full min-w-max items-start gap-4 pb-2">
             {steps.map((step, index) =>
               step.id === currentStep.id ? (
@@ -147,42 +144,25 @@ function KanbanExpandedStep({
   onAdvance?: () => void;
 }) {
   return (
-    <section className="flex h-full max-h-full w-[540px] shrink-0 flex-col overflow-hidden rounded-[24px] border border-sky-400/55 bg-[linear-gradient(180deg,rgba(24,30,42,0.94),rgba(17,22,33,0.98))] shadow-[0_0_0_1px_rgba(34,211,238,0.12),0_18px_48px_rgba(15,23,42,0.55),0_0_48px_rgba(34,211,238,0.16)]">
-      <div className="rounded-t-[24px] border-b border-sky-300/25 bg-[linear-gradient(90deg,rgba(34,211,238,0.92),rgba(56,189,248,0.78),rgba(103,232,249,0.92))] px-4 py-3 text-slate-950">
+    <section className="flex h-full max-h-full w-[540px] shrink-0 flex-col overflow-hidden rounded-[24px] border border-stone-200 bg-white shadow-[0_12px_36px_rgba(148,163,184,0.12)]">
+      <div className="rounded-t-[24px] border-b border-stone-200 bg-stone-100 px-4 py-2.5 text-slate-950">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-900/75">Active Workflow</p>
-            <h3 className="mt-1 text-sm font-semibold">{step.title}</h3>
+            <h3 className="text-sm font-semibold">{step.title}</h3>
           </div>
-          <span className="inline-flex items-center rounded-full bg-slate-950/12 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-slate-950">
+          <span
+            className={cn(
+              "inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide",
+              step.status === "complete" ? "bg-success/15 text-success" : "bg-stone-200 text-slate-700",
+            )}
+          >
             {statusLabel[step.status]}
           </span>
         </div>
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto p-3 md:p-4">
-        <div className="space-y-4">
-        <div className="rounded-xl border border-sky-300/12 bg-slate-900/45 px-3 py-2.5 text-xs text-foreground">
-          <div className="space-y-2">
-            <div className="flex items-center gap-1.5 text-sky-300 font-medium">
-              <Sparkles className="h-3.5 w-3.5" />
-              {nextStep ? "AI next step" : "Workflow complete"}
-            </div>
-            <p className="text-muted-foreground">
-              {nextStep ? `AI expects this PO to move to ${step.title === nextStep.title ? "the next stage" : nextStep.title} next.` : "This is the final workflow step for this PO."}
-            </p>
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center rounded-full border border-border/70 bg-background/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-              Current step
-            </span>
-            <p className="text-xs text-muted-foreground">{step.summary}</p>
-          </div>
-        </div>
-
+        <div className="space-y-3">
         {step.content}
         </div>
       </div>
@@ -216,8 +196,8 @@ function KanbanCollapsedStep({
   onSelect: () => void;
 }) {
   const collapsedTone = isBeforeActive
-    ? "border-emerald-400/35 bg-[linear-gradient(180deg,rgba(20,83,45,0.18),rgba(15,23,42,0.95))]"
-    : "border-border/80 bg-[linear-gradient(180deg,rgba(30,41,59,0.34),rgba(15,23,42,0.95))]";
+    ? "border-emerald-100 bg-emerald-50"
+    : "border-stone-200 bg-white";
 
   return (
     <button
@@ -232,8 +212,8 @@ function KanbanCollapsedStep({
         <div className={cn(
           "flex w-10 shrink-0 items-center justify-center rounded-l-[22px] border-r px-1",
           isBeforeActive
-            ? "border-emerald-400/25 bg-emerald-300/12 text-emerald-200"
-            : "border-white/10 bg-white/5 text-slate-300",
+            ? "border-emerald-100 bg-emerald-50 text-emerald-700"
+            : "border-stone-200 bg-stone-50 text-slate-500",
         )}>
           <span className="[writing-mode:vertical-rl] rotate-180 text-[11px] font-semibold uppercase tracking-[0.28em]">
             {isBeforeActive ? "Completed" : "Queued"}
@@ -244,7 +224,7 @@ function KanbanCollapsedStep({
           <div className="space-y-3">
             <div className="space-y-2">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-white/8 px-2 text-[10px] font-semibold text-foreground">
+                <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-stone-100 px-2 text-[10px] font-semibold text-foreground">
                   {index + 1}
                 </span>
                 <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold", statusStyles[step.status])}>
@@ -254,29 +234,29 @@ function KanbanCollapsedStep({
               <h3 className="text-sm font-semibold leading-snug text-foreground">{step.title}</h3>
             </div>
 
-            <div className="rounded-xl border border-white/8 bg-background/28 px-3 py-2.5">
+            <div className="rounded-xl border border-stone-200 bg-background px-3 py-2.5">
               <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Summary</p>
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-6">{step.summary}</p>
             </div>
 
-            <div className="space-y-2 rounded-xl border border-white/8 bg-card/40 px-3 py-3">
-              <div className="h-1.5 w-16 rounded-full bg-white/12" />
-              <div className="h-1.5 w-24 rounded-full bg-white/10" />
-              <div className="h-1.5 w-20 rounded-full bg-white/8" />
+            <div className="space-y-2 rounded-xl border border-stone-200 bg-card px-3 py-3">
+              <div className="h-1.5 w-16 rounded-full bg-stone-200" />
+              <div className="h-1.5 w-24 rounded-full bg-stone-200" />
+              <div className="h-1.5 w-20 rounded-full bg-stone-200" />
               {isBeforeActive ? (
-                <span className="inline-flex items-center rounded-full bg-emerald-400/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
+                <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
                   Completed
                 </span>
               ) : (
-                <span className="inline-flex items-center rounded-full bg-slate-500/15 px-2 py-0.5 text-[10px] font-semibold text-slate-300">
+                <span className="inline-flex items-center rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
                   Ready to open
                 </span>
               )}
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-2 border-t border-white/8 pt-3 text-xs">
-            <span className={cn("font-medium", isBeforeActive ? "text-emerald-300" : "text-primary")}>
+          <div className="flex items-center justify-between gap-2 border-t border-stone-200 pt-3 text-xs">
+            <span className={cn("font-medium", isBeforeActive ? "text-emerald-700" : "text-primary")}>
               {isBeforeActive ? "Review again" : "Open lane"}
             </span>
             <ChevronRight className="h-4 w-4 text-primary" />

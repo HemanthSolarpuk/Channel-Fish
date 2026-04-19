@@ -1,8 +1,8 @@
 import type { ReleaseCase, ReleaseStatus, FlowType } from "@/data/releaseQueueData";
 
 const flowBadge: Record<FlowType, string> = {
-  pickup: "bg-[hsl(var(--badge-po))]/15 text-[hsl(var(--badge-po))] border border-[hsl(var(--badge-po))]/30",
-  carrier: "bg-[hsl(var(--badge-invoice))]/15 text-[hsl(var(--badge-invoice))] border border-[hsl(var(--badge-invoice))]/30",
+  pickup: "border border-primary/25 bg-primary/10 text-primary",
+  carrier: "border border-primary/25 bg-primary/10 text-primary",
 };
 
 const flowLabel: Record<FlowType, string> = {
@@ -11,11 +11,11 @@ const flowLabel: Record<FlowType, string> = {
 };
 
 const statusStyles: Record<ReleaseStatus, string> = {
-  "Ready for Release": "bg-success/15 text-success border border-success/30",
-  "Awaiting Warehouse Confirmation": "bg-warning/15 text-warning border border-warning/30",
-  "Awaiting Carrier Readiness": "bg-info/15 text-info border border-info/30",
-  "POD Received": "bg-[hsl(280,70%,55%)]/15 text-[hsl(280,70%,65%)] border border-[hsl(280,70%,55%)]/30",
-  "Invoice Generated": "bg-success/15 text-success border border-success/30",
+  "Ready for Release": "border border-success/30 bg-success/12 text-success",
+  "Awaiting Warehouse Confirmation": "border border-primary/25 bg-primary/10 text-primary",
+  "Awaiting Carrier Readiness": "border border-primary/25 bg-primary/10 text-primary",
+  "POD Received": "border border-primary/25 bg-primary/10 text-primary",
+  "Invoice Generated": "border border-success/30 bg-success/12 text-success",
 };
 
 interface Props {

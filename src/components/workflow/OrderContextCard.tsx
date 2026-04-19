@@ -113,23 +113,8 @@ export function OrderContextCard({ scenario }: { scenario: Scenario }) {
 
   return (
     <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
-      {/* Status chip */}
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]">
-          Order Context Ready
-        </span>
-      </div>
-
       {/* Single selected PO context */}
       <Tile tile={selectedTile} label={selectedLabel} />
-
-      {/* AI Summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-md px-2.5 py-2">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
-        <p className="text-xs text-foreground">
-          Ubik has already captured the PO source data and linked it to the existing sales order and ERP context.
-        </p>
-      </div>
 
       {/* Action buttons */}
       <div className="flex flex-wrap gap-2 pt-1 border-t border-border [&>button]:max-w-full [&>button]:whitespace-normal [&>button]:h-auto [&>button]:min-h-7 [&>button]:py-1 [&>button]:leading-tight">

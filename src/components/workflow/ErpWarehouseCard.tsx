@@ -85,9 +85,9 @@ const mclaneDerived = [
 type StatusValue = "ready" | "awaiting" | "qa-hold";
 
 const statusConfig: Record<StatusValue, { label: string; style: string }> = {
-  ready: { label: "Ready for Release", style: "bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]" },
-  awaiting: { label: "Awaiting Warehouse Confirmation", style: "bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))]" },
-  "qa-hold": { label: "QA Hold", style: "bg-[hsl(var(--destructive))]/15 text-[hsl(var(--destructive))]" },
+  ready: { label: "Ready for Release", style: "bg-success/15 text-success" },
+  awaiting: { label: "Awaiting Warehouse Confirmation", style: "bg-primary/10 text-primary" },
+  "qa-hold": { label: "QA Hold", style: "bg-primary/10 text-primary" },
 };
 
 function ExampleTile({
@@ -140,10 +140,6 @@ function ExampleTile({
 export function ErpWarehouseCard({ scenario }: { scenario: Scenario }) {
   return (
     <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
-      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]">
-        ERP + Warehouse Checked
-      </span>
-
       {scenario === "mclane" ? (
         <ExampleTile label="McLane Example" source={mclaneSource} derived={mclaneDerived} status="ready" />
       ) : (
@@ -155,14 +151,6 @@ export function ErpWarehouseCard({ scenario }: { scenario: Scenario }) {
         <p className="text-[10px] text-[hsl(var(--warning))] font-semibold uppercase tracking-wider mb-0.5">Business Rule</p>
         <p className="text-xs text-foreground">
           If FIFO-preferred stock is in a farther warehouse and SLA is at risk, Ubik can recommend a FIFO override with operator approval.
-        </p>
-      </div>
-
-      {/* AI Summary */}
-      <div className="bg-primary/5 border border-primary/20 rounded-md px-2.5 py-2">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Ubik AI</p>
-        <p className="text-xs text-foreground">
-          Ubik combines source PO fields with ERP and warehouse checks before permitting release.
         </p>
       </div>
 
