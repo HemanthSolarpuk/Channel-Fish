@@ -42,7 +42,6 @@ export function PickupScheduledCard() {
         <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Shipment Details</p>
         <Field label="Pickup Date" value="04/07/2026" />
         <Field label="Delivery Date" value="04/08/2026" />
-        <Field label="Supplier" value="Channel Fish Processing Co. Inc" />
       </div>
 
       {/* Line items */}
@@ -80,7 +79,6 @@ export function PickupScheduledCard() {
 
       <HumanApprovalPanel
         title="Warehouse Sign-Off"
-        description="Use a quick action to confirm pickup readiness, or type a custom warehouse instruction."
         quickActions={["Approve staging", "Request prep confirmation", "Hold pickup release"]}
         placeholder="Add pickup release notes, warehouse instructions, or alternate staging directions."
       />

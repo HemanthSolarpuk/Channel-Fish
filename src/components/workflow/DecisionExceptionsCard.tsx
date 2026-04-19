@@ -125,11 +125,6 @@ export function DecisionExceptionsCard({ scenario }: { scenario: Scenario }) {
 
       <HumanApprovalPanel
         title="Human Decision"
-        description={
-          scenario === "mclane"
-            ? "Choose a fast decision for dispatch and documentation, or write alternate instructions."
-            : "Approve release, wait for warehouse confirmation, or add alternate release instructions."
-        }
         quickActions={
           scenario === "mclane"
             ? ["Approve carrier follow-up", "Hold until dispatch confirmed", "Escalate documentation issue"]

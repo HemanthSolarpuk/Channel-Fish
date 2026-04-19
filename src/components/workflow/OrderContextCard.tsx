@@ -14,7 +14,6 @@ interface OrderTile {
   poNo: string;
   poDate: string;
   poStatus?: string;
-  supplier: string;
   supplierNumber?: string;
   supplierLocation: string;
   shipTo: string;
@@ -32,7 +31,6 @@ const aldiTile: OrderTile = {
   customer: "Aldi Inc.",
   poNo: "7516245499",
   poDate: "03/30/2026",
-  supplier: "Channel Fish Processing Co. Inc",
   supplierNumber: "1233921",
   supplierLocation: "Americold Allentown Ambassador, 7150 Ambassador Drive, Allentown PA 18106",
   shipTo: "South Windsor DC, 295 Rye Street, South Windsor CT 06074-1219",
@@ -49,7 +47,6 @@ const mclaneTile: OrderTile = {
   poNo: "11428530",
   poDate: "2026-02-02",
   poStatus: "Accepted",
-  supplier: "Channel Fish Processing Co Inc / Ice Cube Cold Storage",
   supplierLocation: "Fall River, MA 02720",
   shipTo: "Manassas, 7501 Century Park Rd, Manassas VA 20109",
   estShip: "2026-02-26",
@@ -58,7 +55,7 @@ const mclaneTile: OrderTile = {
   loadType: "Pallet",
   freight: "COLLECT",
   lineItems: [
-    { sku: "00042073", description: "FISH POLLOCK SHIM 2 (Supplier: 3260C006)", qty: "700", uom: "CA" },
+    { sku: "00042073", description: "FISH POLLOCK SHIM 2 (Item: 3260C006)", qty: "700", uom: "CA" },
   ],
 };
 
@@ -79,9 +76,8 @@ function Tile({ tile, label }: { tile: OrderTile; label: string }) {
       <Field label="PO No" value={tile.poNo} />
       <Field label="PO Date" value={tile.poDate} />
       {tile.poStatus && <Field label="PO Status" value={tile.poStatus} />}
-      <Field label="Supplier" value={tile.supplier} />
       {tile.supplierNumber && <Field label="Supplier #" value={tile.supplierNumber} />}
-      <Field label="Supplier Location" value={tile.supplierLocation} />
+      <Field label="Location" value={tile.supplierLocation} />
       <Field label="Ship To" value={tile.shipTo} />
       {tile.pickupDate && <Field label="Pickup Date" value={tile.pickupDate} />}
       {tile.deliveryDate && <Field label="Delivery Date" value={tile.deliveryDate} />}

@@ -62,7 +62,7 @@ export function CarrierDeliveryCard() {
         <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Line Item</p>
         <div className="text-[11px] text-foreground bg-muted/50 rounded px-2 py-1 space-y-0.5">
           <div><span className="font-medium">FISH POLLOCK SHIM 2</span></div>
-          <div className="text-muted-foreground whitespace-normal break-words">McLane Item: 00042073 · Supplier Item: 3260C006</div>
+          <div className="text-muted-foreground whitespace-normal break-words">McLane Item: 00042073 · Item: 3260C006</div>
           <div className="whitespace-normal break-words">Qty: 700 CA · 14 Pallets · 31,360.0 lbs · 718.0 cube</div>
         </div>
       </div>
@@ -100,7 +100,6 @@ export function CarrierDeliveryCard() {
 
       <HumanApprovalPanel
         title="Dispatch Approval"
-        description="Confirm dispatch readiness with a quick action, or write custom instructions for carrier coordination."
         quickActions={["Approve dispatch", "Request carrier follow-up", "Hold shipment"]}
         placeholder="Add dispatch notes, carrier instructions, or alternate shipment handling guidance."
       />

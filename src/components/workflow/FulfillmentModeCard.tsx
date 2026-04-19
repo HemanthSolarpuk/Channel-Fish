@@ -16,12 +16,10 @@ function ModeCard({
   title,
   subtitle,
   fields,
-  reasons,
 }: {
   title: string;
   subtitle: string;
   fields: { label: string; value: string }[];
-  reasons: string[];
 }) {
   return (
     <div className="rounded-lg border bg-secondary/40 p-2.5 md:p-3 space-y-1.5">
@@ -32,15 +30,6 @@ function ModeCard({
       {fields.map((f, i) => (
         <Field key={i} label={f.label} value={f.value} />
       ))}
-      <div className="pt-1 border-t border-border space-y-1">
-        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Classification Reason</p>
-        {reasons.map((r, i) => (
-          <div key={i} className="flex items-start gap-1.5 text-[11px] text-foreground">
-            <span className="text-[hsl(var(--success))] mt-px">✓</span>
-            <span>{r}</span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
@@ -61,11 +50,6 @@ export function FulfillmentModeCard({ scenario }: { scenario: Scenario }) {
             { label: "Load Type", value: "Pallet" },
             { label: "Freight", value: "COLLECT" },
           ]}
-          reasons={[
-            "Carrier is named on PO",
-            "Freight is not prepaid",
-            "Delivery schedule is PO-driven",
-          ]}
         />
       ) : (
         <ModeCard
@@ -78,17 +62,10 @@ export function FulfillmentModeCard({ scenario }: { scenario: Scenario }) {
             { label: "Pickup Date", value: "04/07/2026" },
             { label: "Delivery Date", value: "04/08/2026" },
           ]}
-          reasons={[
-            "PO includes explicit pickup date",
-            "PO includes explicit supplier pickup location",
-            "PO includes explicit delivery date",
-          ]}
         />
       )}
 
       <HumanApprovalPanel
-        title="Human Approval"
-        description="Confirm the classified fulfillment path or leave a custom routing instruction."
         quickActions={
           scenario === "mclane"
             ? ["Approve carrier mode", "Request logistics review", "Hold for clarification"]

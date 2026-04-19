@@ -4,15 +4,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Send } from "lucide-react";
 
 interface HumanApprovalPanelProps {
-  title: string;
-  description: string;
+  title?: string;
   quickActions: string[];
   placeholder: string;
 }
 
 export function HumanApprovalPanel({
   title,
-  description,
   quickActions,
   placeholder,
 }: HumanApprovalPanelProps) {
@@ -24,10 +22,7 @@ export function HumanApprovalPanel({
 
   return (
     <div className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-3 space-y-3">
-      <div className="space-y-1">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">{title}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </div>
+      {title ? <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">{title}</p> : null}
 
       <div className="flex flex-wrap gap-2">
         {quickActions.map((action) => (
@@ -51,10 +46,7 @@ export function HumanApprovalPanel({
         className="min-h-[72px] resize-none bg-background/70 text-sm"
       />
 
-      <div className="flex items-end justify-between gap-3">
-        <p className="text-[11px] text-muted-foreground">
-          Use a quick action for a fast response, or type custom instructions for AI and operations.
-        </p>
+      <div className="flex justify-end">
         <Button
           type="button"
           size="sm"

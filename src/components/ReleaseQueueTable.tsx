@@ -11,11 +11,11 @@ const flowLabel: Record<FlowType, string> = {
 };
 
 const statusStyles: Record<ReleaseStatus, string> = {
-  "Ready for Release": "border border-success/30 bg-success/12 text-success",
+  "Ready for Release": "border border-primary/25 bg-primary/10 text-primary",
   "Awaiting Warehouse Confirmation": "border border-primary/25 bg-primary/10 text-primary",
   "Awaiting Carrier Readiness": "border border-primary/25 bg-primary/10 text-primary",
   "POD Received": "border border-primary/25 bg-primary/10 text-primary",
-  "Invoice Generated": "border border-success/30 bg-success/12 text-success",
+  "Invoice Generated": "border border-primary/25 bg-primary/10 text-primary",
 };
 
 interface Props {

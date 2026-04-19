@@ -91,12 +91,10 @@ const statusConfig: Record<StatusValue, { label: string; style: string }> = {
 };
 
 function ExampleTile({
-  label,
   source,
   derived,
   status,
 }: {
-  label: string;
   source: typeof aldiSource;
   derived: typeof aldiDerived;
   status: StatusValue;
@@ -105,7 +103,6 @@ function ExampleTile({
   return (
     <div className="rounded-lg border bg-secondary/40 p-2.5 md:p-3 space-y-1.5">
       <div className="flex flex-wrap items-start justify-between gap-1.5">
-        <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">{label}</p>
         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${s.style}`}>{s.label}</span>
       </div>
 
@@ -141,26 +138,13 @@ export function ErpWarehouseCard({ scenario }: { scenario: Scenario }) {
   return (
     <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
       {scenario === "mclane" ? (
-        <ExampleTile label="McLane Example" source={mclaneSource} derived={mclaneDerived} status="ready" />
+        <ExampleTile source={mclaneSource} derived={mclaneDerived} status="ready" />
       ) : (
-        <ExampleTile label="ALDI Example" source={aldiSource} derived={aldiDerived} status="ready" />
+        <ExampleTile source={aldiSource} derived={aldiDerived} status="ready" />
       )}
-
-      {/* Business Note */}
-      <div className="bg-[hsl(var(--warning))]/5 border border-[hsl(var(--warning))]/20 rounded-md px-2.5 py-2">
-        <p className="text-[10px] text-[hsl(var(--warning))] font-semibold uppercase tracking-wider mb-0.5">Business Rule</p>
-        <p className="text-xs text-foreground">
-          If FIFO-preferred stock is in a farther warehouse and SLA is at risk, Ubik can recommend a FIFO override with operator approval.
-        </p>
-      </div>
 
       <HumanApprovalPanel
         title="Operator Approval"
-        description={
-          scenario === "mclane"
-            ? "Approve the warehouse readiness decision or leave storage and allocation instructions."
-            : "Approve the FIFO and warehouse decision, or give alternate storage instructions."
-        }
         quickActions={
           scenario === "mclane"
             ? ["Approve warehouse readiness", "Request recheck", "Escalate inventory issue"]
