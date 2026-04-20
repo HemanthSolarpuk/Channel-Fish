@@ -20,12 +20,15 @@ describe("WorkflowDrawer", () => {
     expect(screen.getByText("1. Existing Order Context")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "VMI Context" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Documents" })).not.toBeInTheDocument();
+    expect(screen.getAllByText("Pickup Scheduled").length).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: "Approve pickup mode" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /5A\. Pickup Scheduled/i }));
-    expect(screen.getByText("5A. Pickup Scheduled")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /4\. Pickup Scheduled/i }));
+    expect(screen.getByText("4. Pickup Scheduled")).toBeInTheDocument();
 
     rerender(<WorkflowDrawer releaseCase={releaseCases.find((item) => item.id === "mclane") ?? releaseCases[0]} onClose={() => {}} />);
     expect(screen.getByText("1. Existing Order Context")).toBeInTheDocument();
-    expect(screen.getByText("2. Fulfillment Mode")).toBeInTheDocument();
+    expect(screen.queryByText("2. Fulfillment Mode")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Approve carrier mode" })).toBeInTheDocument();
   });
 });

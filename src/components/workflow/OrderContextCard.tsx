@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { HumanApprovalPanel } from "@/components/workflow/HumanApprovalPanel";
 import { FileText, ShoppingCart, Database } from "lucide-react";
 type Scenario = "aldi" | "mclane";
 
@@ -25,6 +26,14 @@ interface OrderTile {
   loadType?: string;
   freight?: string;
   lineItems: LineItem[];
+}
+
+interface FulfillmentSnapshot {
+  title: string;
+  subtitle: string;
+  fields: { label: string; value: string }[];
+  quickActions: string[];
+  placeholder: string;
 }
 
 const aldiTile: OrderTile = {
@@ -57,6 +66,34 @@ const mclaneTile: OrderTile = {
   lineItems: [
     { sku: "00042073", description: "FISH POLLOCK SHIM 2 (Item: 3260C006)", qty: "700", uom: "CA" },
   ],
+};
+
+const aldiFulfillment: FulfillmentSnapshot = {
+  title: "Pickup Scheduled",
+  subtitle: "Execution routing",
+  fields: [
+    { label: "Pickup Location", value: "Americold Allentown Ambassador" },
+    { label: "Ship To", value: "South Windsor DC" },
+    { label: "Pickup Date", value: "04/07/2026" },
+    { label: "Delivery Date", value: "04/08/2026" },
+  ],
+  quickActions: ["Approve pickup mode", "Request warehouse review", "Hold for clarification"],
+  placeholder: "Add any routing notes, approval context, or alternate execution instructions.",
+};
+
+const mclaneFulfillment: FulfillmentSnapshot = {
+  title: "Carrier Delivery / Collect Freight",
+  subtitle: "Execution routing",
+  fields: [
+    { label: "Ship To", value: "Manassas" },
+    { label: "Est. Ship", value: "2026-02-26" },
+    { label: "Due Date", value: "2026-02-27" },
+    { label: "Ship Via", value: "VANTIX LOGISTICS" },
+    { label: "Load Type", value: "Pallet" },
+    { label: "Freight", value: "COLLECT" },
+  ],
+  quickActions: ["Approve carrier mode", "Request logistics review", "Hold for clarification"],
+  placeholder: "Add any routing notes, approval context, or alternate execution instructions.",
 };
 
 function Field({ label, value }: { label: string; value: string }) {
@@ -106,13 +143,14 @@ function Tile({ tile, label }: { tile: OrderTile; label: string }) {
 export function OrderContextCard({ scenario }: { scenario: Scenario }) {
   const selectedTile = scenario === "mclane" ? mclaneTile : aldiTile;
   const selectedLabel = scenario === "mclane" ? "McLane Carrier Delivery" : "ALDI Pickup Scheduled";
+  const fulfillment = scenario === "mclane" ? mclaneFulfillment : aldiFulfillment;
 
   return (
     <div className="rounded-lg border bg-card p-2.5 md:p-3 space-y-2.5">
-      {/* Single selected PO context */}
       <Tile tile={selectedTile} label={selectedLabel} />
 
-      {/* Action buttons */}
+      <HumanApprovalPanel quickActions={fulfillment.quickActions} placeholder={fulfillment.placeholder} />
+
       <div className="flex flex-wrap gap-2 pt-1 border-t border-border [&>button]:max-w-full [&>button]:whitespace-normal [&>button]:h-auto [&>button]:min-h-7 [&>button]:py-1 [&>button]:leading-tight">
         <Button variant="outline" size="sm" className="text-[11px] px-2 gap-1">
           <FileText className="w-3 h-3" /> View PO

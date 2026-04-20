@@ -2,7 +2,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import { ArrowRight, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OrderContextCard } from "@/components/workflow/OrderContextCard";
-import { FulfillmentModeCard } from "@/components/workflow/FulfillmentModeCard";
 import { ErpWarehouseCard } from "@/components/workflow/ErpWarehouseCard";
 import { DecisionExceptionsCard } from "@/components/workflow/DecisionExceptionsCard";
 import { PickupScheduledCard } from "@/components/workflow/PickupScheduledCard";
@@ -57,8 +56,8 @@ export function WorkflowDrawer({ releaseCase, onClose }: Props) {
   const scenario: Scenario = releaseCase.flowType === "pickup" ? "aldi" : "mclane";
   const orderedStepIds =
     releaseCase.flowType === "pickup"
-      ? ["1-context", "2-fulfillment", "3-erp-check", "4-decision", "5a-pickup", "6-execution", "7-pod", "8-invoice"]
-      : ["1-context", "2-fulfillment", "3-erp-check", "4-decision", "5b-carrier", "6-execution", "7-pod", "8-invoice"];
+      ? ["1-context", "3-erp-check", "4-decision", "5a-pickup", "6-execution", "7-pod", "8-invoice"]
+      : ["1-context", "3-erp-check", "4-decision", "5b-carrier", "6-execution", "7-pod", "8-invoice"];
 
   const stepMap = new Map(order.columns.map((column) => [column.id, column]));
   const steps: DrawerStep[] = orderedStepIds
@@ -268,8 +267,7 @@ function KanbanCollapsedStep({
 }
 
 function getStepSummary(column: WorkflowColumnData, releaseCase: ReleaseCase) {
-  if (column.id === "1-context") return `Review PO ${releaseCase.poNumber} and verify existing order context.`;
-  if (column.id === "2-fulfillment") return `Confirm whether this PO runs as ${flowTypeLabel[releaseCase.flowType]}.`;
+  if (column.id === "1-context") return `Review PO ${releaseCase.poNumber}, routing, and existing order context.`;
   if (column.id === "3-erp-check") return "Validate ERP sync, warehouse allocation, and release readiness.";
   if (column.id === "4-decision") return "Review exceptions and confirm the release decision path.";
   return column.nextAction;
@@ -277,7 +275,6 @@ function getStepSummary(column: WorkflowColumnData, releaseCase: ReleaseCase) {
 
 function getStepContent(column: WorkflowColumnData, scenario: Scenario, flowType: ReleaseCase["flowType"]) {
   if (column.id === "1-context") return <OrderContextCard scenario={scenario} />;
-  if (column.id === "2-fulfillment") return <FulfillmentModeCard scenario={scenario} />;
   if (column.id === "3-erp-check") return <ErpWarehouseCard scenario={scenario} />;
   if (column.id === "4-decision") return <DecisionExceptionsCard scenario={scenario} />;
   if (column.id === "5a-pickup" && flowType === "pickup") return <PickupScheduledCard />;

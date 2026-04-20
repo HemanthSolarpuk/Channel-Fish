@@ -33,7 +33,7 @@ export const workflowOrders: WorkflowOrder[] = [
         id: "1-context",
         title: "1. Existing Order Context",
         status: "complete",
-        nextAction: "Proceed to fulfillment",
+        nextAction: "Proceed to ERP check",
         fields: [
           { label: "Order #", value: "PO-2024-00156", source: "PO" },
           { label: "Vendor", value: "Pacific Seafood Exports", source: "PO" },
@@ -59,7 +59,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "3-erp-check",
-        title: "3. ERP + Warehouse Check",
+        title: "2. ERP + Warehouse Check",
         status: "complete",
         nextAction: "Release for staging",
         fields: [
@@ -73,7 +73,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "4-decision",
-        title: "4. Decision + Exceptions",
+        title: "3. Decision + Exceptions",
         status: "complete",
         nextAction: "Approve release",
         fields: [
@@ -85,7 +85,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "5a-pickup",
-        title: "5A. Pickup Scheduled",
+        title: "4. Pickup Scheduled",
         status: "in-progress",
         nextAction: "Confirm carrier arrival",
         dimmed: false,
@@ -100,7 +100,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "5b-carrier",
-        title: "5B. Carrier Delivery",
+        title: "4. Carrier Delivery",
         status: "pending",
         nextAction: "N/A — Pickup order",
         dimmed: true,
@@ -110,7 +110,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "6-execution",
-        title: "6. Execution",
+        title: "5. Execution",
         status: "pending",
         nextAction: "Begin loading",
         fields: [
@@ -122,7 +122,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "7-pod",
-        title: "7. POD / Confirmation",
+        title: "6. POD / Confirmation",
         status: "pending",
         nextAction: "Awaiting delivery",
         fields: [
@@ -133,7 +133,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "8-invoice",
-        title: "8. ERP Update + Invoice",
+        title: "7. ERP Update + Invoice",
         status: "pending",
         nextAction: "Generate invoice after POD",
         fields: [
@@ -160,7 +160,7 @@ export const workflowOrders: WorkflowOrder[] = [
         id: "1-context",
         title: "1. Existing Order Context",
         status: "complete",
-        nextAction: "Proceed to fulfillment",
+        nextAction: "Proceed to ERP check",
         fields: [
           { label: "Order #", value: "NF24-0892", source: "PO" },
           { label: "Vendor", value: "Nordic Fish AS", source: "PO" },
@@ -186,7 +186,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "3-erp-check",
-        title: "3. ERP + Warehouse Check",
+        title: "2. ERP + Warehouse Check",
         status: "complete",
         nextAction: "Confirm allocation",
         fields: [
@@ -200,7 +200,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "4-decision",
-        title: "4. Decision + Exceptions",
+        title: "3. Decision + Exceptions",
         status: "in-progress",
         nextAction: "Review carrier rate",
         fields: [
@@ -211,7 +211,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "5a-pickup",
-        title: "5A. Pickup Scheduled",
+        title: "4. Pickup Scheduled",
         status: "pending",
         nextAction: "N/A — Carrier order",
         dimmed: true,
@@ -221,7 +221,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "5b-carrier",
-        title: "5B. Carrier Delivery",
+        title: "4. Carrier Delivery",
         status: "in-progress",
         nextAction: "Confirm carrier dispatch",
         dimmed: false,
@@ -236,7 +236,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "6-execution",
-        title: "6. Execution",
+        title: "5. Execution",
         status: "pending",
         nextAction: "Schedule dock for loading",
         fields: [
@@ -248,7 +248,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "7-pod",
-        title: "7. POD / Confirmation",
+        title: "6. POD / Confirmation",
         status: "pending",
         nextAction: "Awaiting delivery",
         fields: [
@@ -259,7 +259,7 @@ export const workflowOrders: WorkflowOrder[] = [
       },
       {
         id: "8-invoice",
-        title: "8. ERP Update + Invoice",
+        title: "7. ERP Update + Invoice",
         status: "pending",
         nextAction: "Generate invoice after POD",
         fields: [

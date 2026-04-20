@@ -30,6 +30,6 @@ describe("VMI programs", () => {
 
     expect(screen.getAllByText("Aldi Inc.")[0]).toBeInTheDocument();
     expect(screen.getByText(/PO #7516245503/)).toBeInTheDocument();
-    expect(screen.getByText("4. Decision + Exceptions")).toBeInTheDocument();
+    expect(screen.getByText("3. Decision + Exceptions")).toBeInTheDocument();
   });
 });
