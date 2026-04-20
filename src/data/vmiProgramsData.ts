@@ -85,6 +85,7 @@ export interface InboundSupplyRow {
 
 export interface DemandSignalRow {
   id: string;
+  sku: string;
   location: string;
   bucket: string;
   forecast: number;
@@ -94,6 +95,7 @@ export interface DemandSignalRow {
   manualOverride?: string;
   risk: ProgramSeverity;
   granularity: DemandGranularity;
+  isProjected?: boolean;
 }
 
 export interface ProgramException {
@@ -496,15 +498,42 @@ export const vmiProgramDetails: Record<string, VmiProgramDetail> = {
       },
     ],
     demandSignalRows: [
-      { id: "weekly-sw-1", location: "South Windsor DC", bucket: "Apr 21", forecast: 14000, actual: 13800, variancePct: -1.4, promotion: "None", risk: "Low", granularity: "weekly" },
-      { id: "weekly-man-1", location: "Manassas DC", bucket: "Apr 21", forecast: 10200, actual: 11700, variancePct: 14.7, promotion: "Frozen seafood ad", manualOverride: "+8% lift", risk: "High", granularity: "weekly" },
-      { id: "weekly-hou-1", location: "Houston DC", bucket: "Apr 21", forecast: 9800, actual: 9400, variancePct: -4.1, promotion: "None", risk: "Low", granularity: "weekly" },
-      { id: "weekly-sw-2", location: "South Windsor DC", bucket: "Apr 28", forecast: 14200, actual: 14500, variancePct: 2.1, promotion: "Lent tail", risk: "Medium", granularity: "weekly" },
-      { id: "weekly-man-2", location: "Manassas DC", bucket: "Apr 28", forecast: 10500, actual: 11900, variancePct: 13.3, promotion: "Frozen seafood ad", manualOverride: "Manual demand uplift", risk: "High", granularity: "weekly" },
-      { id: "weekly-hou-2", location: "Houston DC", bucket: "Apr 28", forecast: 9900, actual: 9500, variancePct: -4.0, promotion: "None", risk: "Low", granularity: "weekly" },
-      { id: "monthly-apr-sw", location: "South Windsor DC", bucket: "Apr 2026", forecast: 56000, actual: 57300, variancePct: 2.3, promotion: "Seasonal feature", risk: "Medium", granularity: "monthly" },
-      { id: "monthly-apr-man", location: "Manassas DC", bucket: "Apr 2026", forecast: 40800, actual: 46800, variancePct: 14.7, promotion: "Frozen seafood ad", manualOverride: "Promo override active", risk: "High", granularity: "monthly" },
-      { id: "monthly-apr-hou", location: "Houston DC", bucket: "Apr 2026", forecast: 39200, actual: 38000, variancePct: -3.1, promotion: "None", risk: "Low", granularity: "monthly" },
+      { id: "weekly-fish-sw-0", sku: "Fish Sticks & Crunchy Fillets", location: "South Windsor DC", bucket: "Apr 14", forecast: 6000, actual: 5900, variancePct: -1.7, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-fish-hou-0", sku: "Fish Sticks & Crunchy Fillets", location: "Houston DC", bucket: "Apr 14", forecast: 5600, actual: 5500, variancePct: -1.8, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-cod-man-0", sku: "Beer Battered Cod Fillets", location: "Manassas DC", bucket: "Apr 14", forecast: 9800, actual: 11100, variancePct: 13.3, promotion: "Frozen seafood ad", manualOverride: "+8% lift", risk: "High", granularity: "weekly" },
+      { id: "weekly-cod-sw-0", sku: "Beer Battered Cod Fillets", location: "South Windsor DC", bucket: "Apr 14", forecast: 3600, actual: 3500, variancePct: -2.8, promotion: "None", risk: "Medium", granularity: "weekly" },
+      { id: "weekly-shrimp-hou-0", sku: "Breaded Shrimp", location: "Houston DC", bucket: "Apr 14", forecast: 9600, actual: 9300, variancePct: -3.1, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-shrimp-sw-0", sku: "Breaded Shrimp", location: "South Windsor DC", bucket: "Apr 14", forecast: 4100, actual: 4200, variancePct: 2.4, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-fish-sw-1", sku: "Fish Sticks & Crunchy Fillets", location: "South Windsor DC", bucket: "Apr 21", forecast: 6200, actual: 6100, variancePct: -1.6, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-fish-hou-1", sku: "Fish Sticks & Crunchy Fillets", location: "Houston DC", bucket: "Apr 21", forecast: 5800, actual: 5600, variancePct: -3.4, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-cod-man-1", sku: "Beer Battered Cod Fillets", location: "Manassas DC", bucket: "Apr 21", forecast: 10200, actual: 11700, variancePct: 14.7, promotion: "Frozen seafood ad", manualOverride: "+8% lift", risk: "High", granularity: "weekly" },
+      { id: "weekly-cod-sw-1", sku: "Beer Battered Cod Fillets", location: "South Windsor DC", bucket: "Apr 21", forecast: 3800, actual: 3700, variancePct: -2.6, promotion: "None", risk: "Medium", granularity: "weekly" },
+      { id: "weekly-shrimp-hou-1", sku: "Breaded Shrimp", location: "Houston DC", bucket: "Apr 21", forecast: 9800, actual: 9400, variancePct: -4.1, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-shrimp-sw-1", sku: "Breaded Shrimp", location: "South Windsor DC", bucket: "Apr 21", forecast: 4200, actual: 4300, variancePct: 2.4, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-fish-sw-2", sku: "Fish Sticks & Crunchy Fillets", location: "South Windsor DC", bucket: "Apr 28", forecast: 6400, actual: 6500, variancePct: 1.6, promotion: "Lent tail", risk: "Medium", granularity: "weekly" },
+      { id: "weekly-fish-hou-2", sku: "Fish Sticks & Crunchy Fillets", location: "Houston DC", bucket: "Apr 28", forecast: 6000, actual: 5900, variancePct: -1.7, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-cod-man-2", sku: "Beer Battered Cod Fillets", location: "Manassas DC", bucket: "Apr 28", forecast: 10500, actual: 11900, variancePct: 13.3, promotion: "Frozen seafood ad", manualOverride: "Manual demand uplift", risk: "High", granularity: "weekly" },
+      { id: "weekly-cod-sw-2", sku: "Beer Battered Cod Fillets", location: "South Windsor DC", bucket: "Apr 28", forecast: 3900, actual: 3800, variancePct: -2.6, promotion: "None", risk: "Medium", granularity: "weekly" },
+      { id: "weekly-shrimp-hou-2", sku: "Breaded Shrimp", location: "Houston DC", bucket: "Apr 28", forecast: 9900, actual: 9500, variancePct: -4.0, promotion: "None", risk: "Low", granularity: "weekly" },
+      { id: "weekly-shrimp-sw-2", sku: "Breaded Shrimp", location: "South Windsor DC", bucket: "Apr 28", forecast: 4300, actual: 4500, variancePct: 4.7, promotion: "None", risk: "Medium", granularity: "weekly" },
+      { id: "weekly-fish-sw-3", sku: "Fish Sticks & Crunchy Fillets", location: "South Windsor DC", bucket: "May 5", forecast: 6600, actual: 6700, variancePct: 1.5, promotion: "Memorial Day planning", risk: "Medium", granularity: "weekly", isProjected: true },
+      { id: "weekly-fish-hou-3", sku: "Fish Sticks & Crunchy Fillets", location: "Houston DC", bucket: "May 5", forecast: 6100, actual: 6000, variancePct: -1.6, promotion: "None", risk: "Low", granularity: "weekly", isProjected: true },
+      { id: "weekly-cod-man-3", sku: "Beer Battered Cod Fillets", location: "Manassas DC", bucket: "May 5", forecast: 10800, actual: 12100, variancePct: 12.0, promotion: "Frozen seafood ad", manualOverride: "Projected promo carryover", risk: "High", granularity: "weekly", isProjected: true },
+      { id: "weekly-cod-sw-3", sku: "Beer Battered Cod Fillets", location: "South Windsor DC", bucket: "May 5", forecast: 4000, actual: 3900, variancePct: -2.5, promotion: "None", risk: "Medium", granularity: "weekly", isProjected: true },
+      { id: "weekly-shrimp-hou-3", sku: "Breaded Shrimp", location: "Houston DC", bucket: "May 5", forecast: 10000, actual: 9600, variancePct: -4.0, promotion: "None", risk: "Low", granularity: "weekly", isProjected: true },
+      { id: "weekly-shrimp-sw-3", sku: "Breaded Shrimp", location: "South Windsor DC", bucket: "May 5", forecast: 4400, actual: 4450, variancePct: 1.1, promotion: "None", risk: "Low", granularity: "weekly", isProjected: true },
+      { id: "monthly-fish-mar-sw", sku: "Fish Sticks & Crunchy Fillets", location: "South Windsor DC", bucket: "Mar 2026", forecast: 24800, actual: 25200, variancePct: 1.6, promotion: "Seasonal feature", risk: "Low", granularity: "monthly" },
+      { id: "monthly-fish-mar-hou", sku: "Fish Sticks & Crunchy Fillets", location: "Houston DC", bucket: "Mar 2026", forecast: 23200, actual: 22600, variancePct: -2.6, promotion: "None", risk: "Low", granularity: "monthly" },
+      { id: "monthly-cod-mar-man", sku: "Beer Battered Cod Fillets", location: "Manassas DC", bucket: "Mar 2026", forecast: 39400, actual: 42100, variancePct: 6.9, promotion: "Frozen seafood ad", manualOverride: "Promo tail", risk: "Medium", granularity: "monthly" },
+      { id: "monthly-cod-mar-sw", sku: "Beer Battered Cod Fillets", location: "South Windsor DC", bucket: "Mar 2026", forecast: 14900, actual: 14500, variancePct: -2.7, promotion: "None", risk: "Low", granularity: "monthly" },
+      { id: "monthly-shrimp-mar-hou", sku: "Breaded Shrimp", location: "Houston DC", bucket: "Mar 2026", forecast: 38400, actual: 37600, variancePct: -2.1, promotion: "None", risk: "Low", granularity: "monthly" },
+      { id: "monthly-shrimp-mar-sw", sku: "Breaded Shrimp", location: "South Windsor DC", bucket: "Mar 2026", forecast: 16200, actual: 16800, variancePct: 3.7, promotion: "None", risk: "Medium", granularity: "monthly" },
+      { id: "monthly-fish-apr-sw", sku: "Fish Sticks & Crunchy Fillets", location: "South Windsor DC", bucket: "Apr 2026 Projected Close", forecast: 25200, actual: 25900, variancePct: 2.8, promotion: "Seasonal feature", risk: "Medium", granularity: "monthly", isProjected: true },
+      { id: "monthly-fish-apr-hou", sku: "Fish Sticks & Crunchy Fillets", location: "Houston DC", bucket: "Apr 2026 Projected Close", forecast: 23600, actual: 22900, variancePct: -3.0, promotion: "None", risk: "Low", granularity: "monthly", isProjected: true },
+      { id: "monthly-cod-apr-man", sku: "Beer Battered Cod Fillets", location: "Manassas DC", bucket: "Apr 2026 Projected Close", forecast: 40800, actual: 46800, variancePct: 14.7, promotion: "Frozen seafood ad", manualOverride: "Projected promo close", risk: "High", granularity: "monthly", isProjected: true },
+      { id: "monthly-cod-apr-sw", sku: "Beer Battered Cod Fillets", location: "South Windsor DC", bucket: "Apr 2026 Projected Close", forecast: 15600, actual: 15100, variancePct: -3.2, promotion: "None", risk: "Medium", granularity: "monthly", isProjected: true },
+      { id: "monthly-shrimp-apr-hou", sku: "Breaded Shrimp", location: "Houston DC", bucket: "Apr 2026 Projected Close", forecast: 39200, actual: 38000, variancePct: -3.1, promotion: "None", risk: "Low", granularity: "monthly", isProjected: true },
+      { id: "monthly-shrimp-apr-sw", sku: "Breaded Shrimp", location: "South Windsor DC", bucket: "Apr 2026 Projected Close", forecast: 16800, actual: 17400, variancePct: 3.6, promotion: "None", risk: "Medium", granularity: "monthly", isProjected: true },
     ],
     exceptions: [
       {
@@ -517,7 +546,7 @@ export const vmiProgramDetails: Record<string, VmiProgramDetail> = {
         recommendedAction: "Pull 12,000 lbs from Los Angeles reserve and escalate alternate cod allocation.",
         inventoryRowIds: ["cod-allentown-man", "cod-losangeles-sw"],
         inboundRowIds: ["inbound-cod-vn-001", "inbound-cod-cn-002"],
-        demandSignalIds: ["weekly-man-1", "weekly-man-2", "monthly-apr-man"],
+        demandSignalIds: ["weekly-cod-man-1", "weekly-cod-man-2", "weekly-cod-man-3", "monthly-cod-apr-man"],
       },
       {
         id: "exception-safety-stock",
@@ -529,7 +558,7 @@ export const vmiProgramDetails: Record<string, VmiProgramDetail> = {
         recommendedAction: "Advance the Qingdao shipment booking and temporarily reduce promo allocation.",
         inventoryRowIds: ["cod-allentown-man", "cod-losangeles-sw"],
         inboundRowIds: ["inbound-cod-cn-002"],
-        demandSignalIds: ["weekly-man-1", "weekly-man-2"],
+        demandSignalIds: ["weekly-cod-man-1", "weekly-cod-man-2", "weekly-cod-man-3"],
       },
       {
         id: "exception-overstock-shrimp",
@@ -541,7 +570,7 @@ export const vmiProgramDetails: Record<string, VmiProgramDetail> = {
         recommendedAction: "Shift 8 pallets into June promotion and pause next shrimp inbound if actual pull stays flat.",
         inventoryRowIds: ["shrimp-losangeles-man", "shrimp-dallas-hou"],
         inboundRowIds: ["inbound-shrimp-in-003"],
-        demandSignalIds: ["weekly-hou-1", "weekly-hou-2"],
+        demandSignalIds: ["weekly-shrimp-hou-1", "weekly-shrimp-hou-2", "weekly-shrimp-hou-3"],
       },
       {
         id: "exception-demand-variance",
@@ -553,7 +582,7 @@ export const vmiProgramDetails: Record<string, VmiProgramDetail> = {
         recommendedAction: "Lock a +10% forecast override for the next 4 weeks and rebalance from Allentown.",
         inventoryRowIds: ["cod-allentown-man"],
         inboundRowIds: [],
-        demandSignalIds: ["weekly-man-1", "weekly-man-2", "monthly-apr-man"],
+        demandSignalIds: ["weekly-cod-man-1", "weekly-cod-man-2", "weekly-cod-man-3", "monthly-cod-apr-man"],
       },
     ],
     financeLens: [

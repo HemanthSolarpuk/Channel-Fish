@@ -28,6 +28,11 @@ const VmiProgramDetailPage = () => {
     [activeExceptionId, program],
   );
 
+  const overviewExceptions = useMemo(
+    () => program?.exceptions.filter((item) => item.severity === "Critical" || item.severity === "High") ?? [],
+    [program],
+  );
+
   const coverageSkuOptions = useMemo(
     () => program?.coverageProjectionBySku.map((item) => item.label) ?? ["All SKUs"],
     [program],
@@ -111,7 +116,7 @@ const VmiProgramDetailPage = () => {
               />
               <div className="grid gap-5 2xl:grid-cols-[minmax(0,1.2fr)_minmax(360px,0.8fr)]">
                 <ExceptionsPanel
-                  exceptions={program.exceptions}
+                  exceptions={overviewExceptions}
                   activeExceptionId={activeExceptionId}
                   onSelectException={setActiveExceptionId}
                   title="Top Alerts"
@@ -152,7 +157,7 @@ const VmiProgramDetailPage = () => {
           </TabsContent>
 
           <TabsContent value="finance" forceMount className="mt-0 data-[state=inactive]:hidden">
-            <FinanceExposurePanel metrics={program.financeLens} />
+            <FinanceExposurePanel metrics={program.financeLens} inventoryRows={program.inventoryCoverageRows} />
           </TabsContent>
         </div>
       </Tabs>

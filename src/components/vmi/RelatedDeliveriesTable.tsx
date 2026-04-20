@@ -46,7 +46,12 @@ export function RelatedDeliveriesTable({
                 <TableCell>{delivery.quantity}</TableCell>
                 <TableCell>{delivery.fulfillmentMode}</TableCell>
                 <TableCell>
-                  <span className={cn("inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold", "border border-primary/25 bg-primary/10 text-primary")}>
+                  <span
+                    className={cn(
+                      "inline-flex max-w-[180px] whitespace-normal break-words rounded-full px-2.5 py-1 text-[11px] font-semibold leading-tight",
+                      "border border-primary/25 bg-primary/10 text-primary",
+                    )}
+                  >
                     {delivery.status}
                   </span>
                 </TableCell>

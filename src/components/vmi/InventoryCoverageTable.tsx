@@ -11,7 +11,29 @@ interface Props {
 
 export function InventoryCoverageTable({ rows, filteredRowIds }: Props) {
   const [expandedSkus, setExpandedSkus] = useState<Record<string, boolean>>({});
-  const visibleRows = filteredRowIds?.length ? rows.filter((row) => filteredRowIds.includes(row.id)) : rows;
+  const [selectedSku, setSelectedSku] = useState("All SKUs");
+  const [selectedWarehouse, setSelectedWarehouse] = useState("All Warehouses");
+
+  const visibleRows = useMemo(() => {
+    const exceptionFiltered = filteredRowIds?.length ? rows.filter((row) => filteredRowIds.includes(row.id)) : rows;
+
+    return exceptionFiltered.filter((row) => {
+      const matchesSku = selectedSku === "All SKUs" || row.sku === selectedSku;
+      const matchesWarehouse = selectedWarehouse === "All Warehouses" || row.warehouse === selectedWarehouse;
+      return matchesSku && matchesWarehouse;
+    });
+  }, [filteredRowIds, rows, selectedSku, selectedWarehouse]);
+
+  const skuOptions = useMemo(
+    () => ["All SKUs", ...new Set(rows.map((row) => row.sku))],
+    [rows],
+  );
+
+  const warehouseOptions = useMemo(
+    () => ["All Warehouses", ...new Set(rows.map((row) => row.warehouse))],
+    [rows],
+  );
+
   const grouped = useMemo(() => {
     return Object.entries(
       visibleRows.reduce<Record<string, InventoryCoverageRow[]>>((acc, row) => {
@@ -23,9 +45,40 @@ export function InventoryCoverageTable({ rows, filteredRowIds }: Props) {
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4 shadow-[0_16px_40px_rgba(148,163,184,0.08)]">
-      <div className="mb-4">
-        <h2 className="text-sm font-semibold text-foreground">Inventory by SKU and Location</h2>
-        <p className="mt-1 text-xs text-muted-foreground">Grouped by SKU, expandable into warehouse and customer destination detail.</p>
+      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <h2 className="text-sm font-semibold text-foreground">Inventory by SKU and Location</h2>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+            SKU
+            <select
+              value={selectedSku}
+              onChange={(event) => setSelectedSku(event.target.value)}
+              className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition focus:border-primary"
+            >
+              {skuOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+            Warehouse
+            <select
+              value={selectedWarehouse}
+              onChange={(event) => setSelectedWarehouse(event.target.value)}
+              className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition focus:border-primary"
+            >
+              {warehouseOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
       <Table>
         <TableHeader>
@@ -43,13 +96,19 @@ export function InventoryCoverageTable({ rows, filteredRowIds }: Props) {
             <TableHead>Weeks of Cover</TableHead>
             <TableHead>Safety Stock</TableHead>
             <TableHead>Aging Days</TableHead>
-            <TableHead>Risk Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
+          {grouped.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={13} className="py-8 text-center text-sm text-muted-foreground">
+                No inventory rows match the selected filters.
+              </TableCell>
+            </TableRow>
+          ) : null}
           {grouped.map(([sku, skuRows]) => {
             const first = skuRows[0];
-            const expanded = expandedSkus[sku] ?? true;
+            const expanded = expandedSkus[sku] ?? false;
 
             return (
               <Fragment key={sku}>
@@ -58,19 +117,18 @@ export function InventoryCoverageTable({ rows, filteredRowIds }: Props) {
                     <button
                       type="button"
                       onClick={() => setExpandedSkus((current) => ({ ...current, [sku]: !expanded }))}
-                      className="text-left"
+                      className="flex items-center gap-2 text-left"
                     >
-                      {expanded ? "−" : "+"} {sku}
+                      <span>{expanded ? "−" : "+"}</span>
+                      <span>{sku}</span>
+                      <span className={cn("inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold", statusPillStyles[first.riskStatus])}>
+                        {first.riskStatus}
+                      </span>
                     </button>
                   </TableCell>
                   <TableCell className="text-muted-foreground">{first.description}</TableCell>
                   <TableCell colSpan={10} className="text-muted-foreground">
-                    {skuRows.length} location rows
-                  </TableCell>
-                  <TableCell>
-                    <span className={cn("inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold", statusPillStyles[first.riskStatus])}>
-                      {first.riskStatus}
-                    </span>
+                    {skuRows.length} locations
                   </TableCell>
                 </TableRow>
                 {expanded
@@ -89,11 +147,6 @@ export function InventoryCoverageTable({ rows, filteredRowIds }: Props) {
                         <TableCell>{row.weeksOfCover.toFixed(1)}</TableCell>
                         <TableCell>{row.safetyStock.toFixed(1)} wks</TableCell>
                         <TableCell>{row.agingDays}</TableCell>
-                        <TableCell>
-                          <span className={cn("inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold", statusPillStyles[row.riskStatus])}>
-                            {row.riskStatus}
-                          </span>
-                        </TableCell>
                       </TableRow>
                     ))
                   : null}
